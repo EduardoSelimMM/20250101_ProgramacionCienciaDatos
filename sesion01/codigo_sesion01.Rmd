@@ -1,0 +1,231 @@
+---
+title: "sesion01"
+author: "Eduardo Martínez"
+date: "2025-02-04"
+output: html_document
+---
+
+```{r}
+#install.packages("sos")
+library(sos)
+```
+
+```{r}
+#findFn("bayesian")
+```
+
+```{r}
+n <- 15
+n
+```
+
+```{r}
+5 -> n
+n
+```
+
+```{r}
+x <- 1
+X <- 10
+x
+X
+```
+
+```{r}
+a = 8
+a
+```
+
+```{r}
+x <- 2
+x <- 2*x + 1
+x
+```
+
+```{r}
+class(5)
+```
+
+```{r}
+class(5.674)
+```
+
+```{r}
+class("Hola")
+```
+
+```{r}
+class(TRUE)
+```
+
+```{r}
+5 + 8
+```
+
+```{r}
+5 * 8
+```
+
+```{r}
+2^5
+```
+
+```{r}
+sqrt(9) # La raíz cuadrada de nueve
+```
+
+```{r}
+9 |> sqrt() # La raíz cuadrada de nueve
+```
+
+```{r}
+tan(sqrt(abs(sin(3.6))))
+```
+
+```{r}
+3.6 |> sin() |> abs() |> sqrt() |> tan()
+```
+
+```{r}
+mi_vector1 <- c(2, 7, 9)
+mi_vector2 <- c(3, 1, 6)
+mi_vector3 <- c(8, 9)
+```
+
+```{r}
+mi_vector1
+mi_vector2
+mi_vector3
+```
+
+```{r}
+mi_vector1 + mi_vector2
+```
+
+```{r}
+otro_vector <- c(mi_vector1, mi_vector2) 
+otro_vector
+```
+
+```{r}
+vector_mounstro <- c(4, "Hola mundo", TRUE, pi)
+vector_mounstro
+```
+
+```{r}
+simpsons <- c("Homero","Marge","Bart","Lisa","Maggie")
+simpsons
+```
+
+```{r}
+length(simpsons)
+```
+
+```{r}
+simpsons[3]
+```
+
+```{r}
+simpsons[2:4]
+```
+
+```{r}
+names(simpsons) <- c("papá","mamá","hijo","hija mayor","hija menor")
+simpsons
+```
+
+```{r}
+simpsons_con_vecino <- c(simpsons,"Flanders")
+simpsons_con_vecino
+```
+
+```{r}
+x <- 1:30
+x
+```
+
+```{r}
+1:10-1
+```
+
+```{r}
+1:(10-1)
+```
+
+```{r}
+seq(length=9, from=1, to=5)
+```
+
+```{r}
+seq(length=11, from=1, to=5)
+```
+
+```{r}
+seq(1, 5, 0.5)
+```
+
+```{r}
+seq(from = 1,to = 5, by = 0.5)
+```
+
+```{r}
+rep(1, 30)
+```
+
+```{r}
+rep(x = 1, times = 30)
+```
+
+```{r}
+rep(x = c(1,3,8), times = 7)
+```
+
+```{r}
+sequence(4:8)
+```
+
+```{r}
+sequence(c(10,5))
+```
+
+```{r}
+sequence(6)
+```
+
+```{r}
+a <- rep(0,10)
+a
+```
+
+```{r}
+dim(a) <- c(2,5)
+a
+```
+
+```{r}
+class(a)
+```
+
+```{r}
+str(a)
+```
+
+```{r}
+m1 <- matrix(data = 1, nr = 2, nc = 2)
+m1
+```
+
+```{r}
+m2 <- matrix(data = c(2,6,7,8), nr = 2, nc = 2)
+m2
+```
+
+```{r}
+a[2,3] <- 8
+a
+```
+
+```{r}
+a[,5] <- c(2,2)
+a
+```
