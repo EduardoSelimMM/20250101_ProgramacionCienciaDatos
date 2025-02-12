@@ -1,0 +1,124 @@
+---
+title: "Mi primer cuaderno"
+author: "Eduardo Martínez"
+date: "2025-02-07"
+output:
+  html_document: default
+---
+
+A partir de aquí, uno empieza a escribir como si estuviera en un bloc de notas especial.
+
+Lo que yo quiero escribir esta tarde es un poco de matemáticas.
+
+La ecuación cuadrática es $$ax^2 + bx + c = 0$$
+
+Podemos observar que en este tipo de archivos puedo escribir matemáticas como en LaTeX.
+
+¿Porqué me gustan estos cuadernos?
+
+En este tipo de documentos, hay español, matemáticas y código. Son muy útiles.
+
+Las matemáticas son como en LaTeX, sólo que acá son cosas más sencillas:
+
+Expresiones matemáticas dentro del mismo renglón $x^1 + 8 -5x  = 0$ es la ecuación favorita de todos.
+
+O bien expresiones matemáticas en su propio renglón con dos signos de pesitos
+
+$$\sin^2(x) + \cos^2(x) = 1$$
+
+es una identidad pitagórica.
+
+Hasta aquí sólo he escrito español y un poquito de matemáticas.
+
+Podríamos incluir títulos, subtítulos, etc... con el símbolo de gatito (ó numeral)
+
+# Título de primer nivel con un gatito
+
+Sigo escribiendo...
+
+## Título de segundo nivel con dos gatitos
+
+Sigo escribiendo más...
+
+### Título de tercer nivel con tres gatitos
+
+Me estoy cansando de escribir
+
+#### y así sucesivamente
+
+También puedo hacer enumeraciones. Esto se hace con la ayuda del símbolo + ¿Cómo?
+
++ Primer fulano de la lista
++ Segunda mengana de la lista
++ Tercer sutano de la lista
+  + Le dí un tabulador y soy el primer subpunto del tercer sutano
+  + Otro item de la sublista
++ Sigo en mi lista principal
++ Soy el cuarto chivito...
+
+También también puedo hacer enumeraciones... simplemente con números:
+
+1. Soy el número uno
+2. Soy el número dos
+3. Soy el número tres
+4. y así sucesivamente...
+
+También se vale con letras
+
+a. Soy el número uno
+b. Soy el número dos
+c. Soy el número tres
+d. y así sucesivamente...
+
+Hasta aquí todo bien??
+
+Pero la gracia de este tipo de documentos, en realidad es que podemos incluir código. ¿Cómo? A partir de lo que se conoce como CHUNKs
+
+```{r}
+x <- 6
+x
+```
+
+¿Cómo inserto estos chunks?
+
+Tantito más a la derecha del botón de tejer... hay un cuadrito con una letra C
+
+```{r}
+# El gatito dentro del código de R
+# es para comentarios
+
+print("Hola mundo")
+```
+
+¿Qué pasa si ya me cansé del Posit Cloud y me quiero ir a RStudio de escritorio o visceversa?
+
+```{r}
+iris
+```
+¿Cómo instalo librerias?
+
+```{r}
+# Para instalarla, sólo se hace una vez
+# install.packages("ggplot2")
+```
+
+```{r}
+# Para mandar llamar las funciones de esa librería
+library(ggplot2)
+```
+
+La otra manera de instalar paqueter es en la pestañita de Packages y en la cajita de Install... seguir las instrucciones.
+
+```{r}
+# Para mandar llamar las librerías que acabo de descargar
+library(dplyr)
+library(readr)
+library(readxl)
+```
+
+Si yo intentara llamar a una librería que no tengo descargada, me va a mandar al diablo
+
+```{r}
+# library(formatable)
+```
+
