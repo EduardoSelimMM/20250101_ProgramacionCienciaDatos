@@ -1,0 +1,981 @@
+---
+title: "Sesión 4"
+author: "Eduardo Martínez"
+date: "2025-02-13"
+output: 
+  html_document:
+    theme: journal
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+# Estructuras de control en R
+
++ Las estructuras de control en R permiten controlar el flujo de ejecución de una serie de expresiones en R.
+
++ Las estructuras de control permiten incorporar cierta "lógica" en tu código de R, en vez de ejecutar siempre el mismo código cada vez.
+
++ Estas estructuras te permiten responder a entradas o características de los datos y ejecutar diferentes expresiones de R en consecuencia.
+
++ Las estructuras de control más comúnmente utilizadas son:
+
++ if y else: Evalúa una condición y actua de acuerdo a dicha condición.
+
++ for: Ejecutar un ciclo/bucle un número fijo (establecido) de veces.
+
++ while: Ejecuta un ciclo/bucle mientras una condición sea verdadera.
+
++ repeat: Ejecutar un ciclo/bucle infinito (se debe interrumpirlo para detenerlo).
+
++ break: Interrumpe la ejecución de un ciclo/bucle.
+
++ next: Omite una iteración de un ciclo/bucle.
+
+## Empecemos con el if y else
+
+```{r}
+# genero un número aleatorio entre el 0 y el 10
+x <- runif(n = 1, min=0, max=10)  
+x
+
+if(x > 3) {
+        y <- 10
+} else {
+        y <- 0
+}
+
+y
+```
+
+## Vamos con el for
+
++ El for permite iterar sobre vectores numéricos
+
+```{r}
+for(i in 1:10) {
+  print(i)
+  }
+```
++ Veamos otro ejemplo:
+
+```{r}
+x <- c("a", "b", "c", "d")
+
+for(i in 1:4) {
+  print(x[i]) # Imprime la entrada i del vector x
+  }
+```
++ Por supuesto, podemos cambiar el orden natural de las iteraciones
+
+```{r}
+x <- c("a", "b", "c", "d")
+
+for(i in 4:1) { #cambiamos el orden
+  print(x[i]) # Imprime la entrada i del vector x
+  }
+```
+```{r}
+x <- c("a", "b", "c", "d")
+
+for(i in c(3,2,1,4,2,2,2,2,2)) { #cambiamos el orden
+  print(x[i]) # Imprime la entrada i del vector x
+  }
+```
+
++ Pero también permite iterar sobre vectores de caracteres
+
+```{r}
+palabras <- c("ciencia", "datos", "estadística", "probabilidad", "flujo")
+
+for(palabra in palabras) {
+  print(palabra)
+  }
+```
++ También podemos iterar sobre listas
+
+Con la lista que trabajamos la sesión pasada:
+
+```{r}
+# Creo un vector de números
+ID_estudiantes <- c(123, 456, 789, 369)
+
+# Creo un vector de strings
+nombres_estudiantes <- c("Julianna", "Felipe", "Verónica", "Federico")
+
+# Creo simplemente un número
+mi_numero_fav <- 7
+
+lista_estudiantes <- list(ID_estudiantes, nombres_estudiantes, mi_numero_fav)
+lista_estudiantes
+```
+
+```{r}
+for(componente in lista_estudiantes){
+  print(componente)
+}
+```
++ Una función que se suele utilizar mucho con el for, es la función `seq_along()`
+
++ Se utiliza cuadno no sabemos a priori la longitud del iterable
+
++ Me devuelve una secuencia numérica desde el 1 hasta la longitud del objeto `x`
+```{r}
+x <- c("a", "b", "c", "d")
+seq_along(x)
+```
+```{r}
+for(i in seq_along(x)) {
+  print(x[i])
+}
+```
+
++ También se utilizan mucho los for junto con la función `seq_len()`
+
++ Me genera una secuencia numérica desde el 1 hasta el argumento
+
+```{r}
+seq_len(7)
+```
+```{r}
+x <- matrix(data = 1:6, nrow = 2, ncol = 3)
+x
+```
+
++ Vamos a iterar sobre esta matriz
+
+
+```{r}
+for(i in seq_len(nrow(x))) { # desde 1 hasta el número de renglones de x
+        for(j in seq_len(ncol(x))) { # desde 1 hasta el número de columnas de x
+                print(x[i, j])
+        }   
+}
+```
+## Ciclo while
+
++ Se ejecuta la instrucción MIENTRAS la condición sea verdadera
+
+```{r}
+count <- 0
+
+while(count < 10) { # MIENTRAS la variable count sea menor que 10 
+  print(count) # imprímela
+  count <- count + 2 # acrtualiza su valo
+  }
+```
+
+```{r}
+z <- 6
+
+while(z >= 3 && z <= 10) { # MIENTRAS z valga al menos 3 PERO no más de 10
+  coin <- rbinom(n = 1, size = 1, prob = 0.5) # simulo un volado justo
+  print(paste("El valor del volado fue", coin, "!!!!!", pi))
+  if(coin == 1) {
+    z <- z + 1
+    print(z)} else {
+    z <- z - 1
+    print(z)} 
+  }
+```
+## La sentencia next
+
++ Sirve para saltarse unas iteraciones basándose en una condicional
+
+```{r}
+for(i in 1:10){
+  if(i <= 4) {
+    next}
+  print(i)
+}
+```
+# Sentencia break
+
++ Sirve para detener un ciclo/loop basándose en una condicional
+
+```{r}
+for(i in 1:100){ # Quiero iterar desde el 1 hasta el 100
+  print(i)
+  if(i > 13){ # Pero si i es más grande que 13, para el ciclo for
+    break}     
+}
+```
+
+# Algunas funciones para operaciones iterativas con la librería {purrr}
+
++ En general, ejecutar for's es costoso computacionalmente
+
++ La líbrería {purrr} tiene una serie de funciones para que sea más sencillo hacer iteraciones sin necesidad de usar el for
+
+```{r}
+library(purrr)
+```
+
++ La primera función que veremos es la función map
+
++ Esta función, permite aplicar una función a un vector
+
+```{r}
+numeros <- c(6, 2, 3, 8, 9)
+purrr::map(numeros, function(x) x^2) # aplico el cuadrado a cada uno de los números
+```
+
++ Vemos que nos lo regresa en forma de lista
+
++ Veamos otro ejemplo
+
+```{r}
+mi_vector <- c("Julianna", "Felipe", "Verónica", "Federico")
+purrr::map(mi_vector, toupper)
+# La función toupper ya existe y sirve para convertir en mayúsculas
+# a un string
+```
++ Veamos qué tipo son lo que nos devuelve
+
+```{r}
+numeros <- c(6, 2, 3, 8, 9)
+resultado <- purrr::map(numeros, function(x) x^2)
+class(numeros)
+class(resultado)
+```
++ También recibe listas de dataframes
+
+```{r}
+# Esta es una lista de dataframes
+# Esta es una lista de tablas
+lista_de_dfs <- list(
+  data.frame(a = c(1, 2, 3), b = c(4, 5, 6)),
+  data.frame(a = c(7, 8, 9), b = c(10, 11, 12)),
+  data.frame(a = c(13, 14, 15), b = c(16, 17, 18))
+)
+lista_de_dfs
+```
+
+```{r}
+lista_de_dfs |> str()
+```
++ Lo que quiero hacer es un resumen de cada dataframe sin correr un for
+
+```{r}
+purrr::map(lista_de_dfs, function(x) summary(x))
+# La función summary es una función que ya existe
+# y te devuelve un resumen de un dataframe
+```
+
++ No abusemos de la función map, pues en R muchas de las funciones ya están vectorizadas
+
+```{r}
+x <- 3:8
+x
+```
+```{r}
+x^3
+```
+```{r}
+sqrt(x)
+```
+```{r}
+sin(x)
+```
+
+```{r}
+x <- c("Hola", "Mundo", "FELIZ")
+toupper(x)
+```
+
++ Pero es muy útil cuando utilizamos funciones adhoc (i.e. diseñadas por nosotros mismos)
+
++ Ejemplo. Primero crearé una función adhoc
+
+```{r}
+mi_funcion <- function(x){
+  y <- paste(x,"jajaja") # pega al argumento de la función con el strin "jajaja"
+  return(y)
+}
+```
+
++ ¿Qué tipo de objeto es `mi_función`?
+
+```{r}
+mi_funcion |> class()
+```
+
++ Ya definí la función, pero no la he aplicado a ningun objeto
+
+```{r}
+mi_funcion(7)
+```
+```{r}
+mi_funcion(1:6)
+```
+```{r}
+mi_funcion("Eduardo")
+```
++ Supongmos que le quiero aplicar esta función adhoc a un vector
+
+```{r}
+x <- c(TRUE, TRUE, FALSE)
+purrr::map(x, mi_funcion)
+```
+
++ Una desventaja de la función map, es que regresa una lista y a veces queremos que nos regrese un tipo de objeto diferente
+
++ `map_dbl()`: Esta función es análoga a `map()`, pero en lugar de devolver una lista, produce un vector numérico. Lo hace aplicando una función específica a cada elemento de una lista y luego devolviendo un vector con la misma longitud que la lista de entrada, que contiene los resultados de dicha operación.
+
+```{r}
+x <- c(3,5,7,pi)
+w <- purrr::map_dbl(x, function(y) y^5)
+w
+class(w)
+```
++ {purrr} también tiene una función para aplicar función tras función i.e. una composición de funciones
+
++ Esta función es la función compose
+
+```{r}
+# defino una función compuesta
+mi_funcion_compuesta <- purrr::compose(sqrt, function(x) x^5)
+# primero calcula la potencia 5 y luego saca la raíz cuadrada
+class(mi_funcion_compuesta)
+```
+
+Vamos a aplicar esta función compuesta a algo
+
+```{r}
+purrr::map_dbl(5, mi_funcion_compuesta)
+```
+Es lo mismo que esto
+
+```{r}
+sqrt(5^5)
+```
++ Pero lo interesante es aplicarlo a un vector de varias entradas
+
+```{r}
+purrr::map_dbl(1:8, mi_funcion_compuesta)
+```
++ Otro ejemplo:
+
+```{r}
+otra_funcion_compuesta <- purrr::compose(abs, sqrt)
+# primero calculo la raíz cuadrada y luego el valor absoluto
+```
+
+```{r}
+purrr::map_dbl(c(9, 25, 81, -100, -144), otra_funcion_compuesta)
+```
++ El orden de las funciones es importante
+
+```{r}
+otra_funcion_compuesta <- purrr::compose(sqrt, abs)
+# Ahora primero vamos a sacar el valor absoluto y luego la raíz cuadrada
+```
+
+```{r}
+purrr::map_dbl(c(9, 25, 81, -100, -144), otra_funcion_compuesta)
+```
+
+```{r}
+otra_funcion_compuesta <- purrr::compose(function(x){x^3},sqrt, abs)
+# Primero saco el valor absoluto
+# Luego la raíz cuadrada
+# luego aplico el cubo
+```
+
+```{r}
+purrr::map_dbl(c(9, 25, 81, -100, -144), otra_funcion_compuesta)
+```
+# Librerías para visualización
+
++ [R Base](https://rstudio-pubs-static.s3.amazonaws.com/7953_4e3efd5b9415444ca065b1167862c349.html)
++ [ggplot2](https://ggplot2.tidyverse.org/)
++ [plotly](https://plot.ly/r/)
++ [lattice](http://lattice.r-forge.r-project.org/Vignettes/src/lattice-intro/lattice-intro.pdf)
++ [rCharts](https://ramnathv.github.io/rCharts/)
++ [corrplot](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)
++ [rbokeh](http://hafen.github.io/rbokeh/index.html)
++ [leaflet](https://rstudio.github.io/leaflet/)
++ [highcharter](http://jkunst.com/highcharter/)
++ [ggiraph](https://davidgohel.github.io/ggiraph/index.html)
++ [gganimate](https://github.com/thomasp85/gganimate)
++ [gghighlight](https://cran.r-project.org/web/packages/gghighlight/vignettes/gghighlight.html)
++ [dygraphs](https://rstudio.github.io/dygraphs/index.html)
++ [trelliscopejs](https://github.com/hafen/trelliscopejs)
++ [esquisse](https://github.com/dreamRs/esquisse)
+
+# La interacción siempre vende
+
++ [Shiny](https://shiny.rstudio.com/gallery/)
++ [Shiny](https://shiny.rstudio.com/gallery/see-more.html)
++ [Shiny dashboards](https://rstudio.github.io/shinydashboard/index.html)
++ [Flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/examples.html)
+
+# Empecemos {.tabset .tabset-pills}
+
+## Las librerías iniciales
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(palmerpenguins)
+```
+
+```{r}
+head(penguins)
+```
+
+```{r}
+datos <- penguins
+```
+
+```{r}
+summary(datos)
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm))
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_line()
+```
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_line() + geom_point()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "pink", shape = "diamond", size = 2)
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3)
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  theme_bw()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_dark()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_light() +
+  theme(axis.title = element_text(size = 15,
+                                  color = "purple", face = "italic"))
+```
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_light() +
+  theme(axis.title.x = element_text(color = "sienna", size = 15, face = "italic"),
+        axis.title.y = element_text(color = "orangered", size = 15))
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_light() +
+  theme(axis.title.x = element_text(color = "sienna", size = 15, face = "italic"),
+        axis.title.y = element_text(color = "orangered", size = 15),
+        axis.text = element_text(color = "dodgerblue", size = 12),
+        axis.text.x = element_text(face = "italic")
+        )
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_light() +
+  theme(axis.title.x = element_text(color = "sienna", size = 15, face = "italic"),
+        axis.title.y = element_text(color = "orangered", size = 15),
+        axis.text = element_text(color = "dodgerblue", size = 12),
+        axis.text.x = element_text(angle = 50, vjust = 1, hjust = 1, size = 12)
+        )
+```
+
+## Juntemos gráficas
+
+```{r}
+graf1 <- datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "red", shape = "diamond", size = 2) +
+  geom_line(color = "blue", linetype = "dotted", lwd = .3) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_light()
+
+graf2 <- datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(color = "purple", shape = "diamond", size = 2) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_gray()
+```
+
+```{r}
+library(patchwork)
+```
+
+```{r}
+graf1 + graf2
+```
+
+```{r}
+graf3 <- datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_line(color = "orange") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal()
+
+(graf1 | graf2 ) / graf3
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal()
+```
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal()
+```
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm,
+                 color = island, shape = species)) +
+  labs(x = "Año", y = "Temperatura (°F)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+```
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.position = c(.15, .15),
+        legend.background = element_rect(fill = "transparent"))
+```
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.position = c(.15, .15),
+        legend.background = element_rect(fill = "transparent"))
+```
+
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = island)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal() +
+  theme(legend.title = element_text(family = "sans", color = "red",
+                                    size = 14, face = "bold"))
+```
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = sex)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_minimal()
+```
+
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = sex)) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  scale_color_discrete(
+    name = "Género:",
+    labels = c("Hembra", "Macho")
+  ) + theme_minimal()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  geom_rug() +
+  theme_minimal()
+```
+
+datos %>% ggplot() +
+  geom_point() +
+   +
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  facet_wrap(~ island) +
+  theme_minimal()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  facet_wrap(~ island, nrow = 2) +
+  theme_minimal()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  facet_wrap(~ island, nrow = 2, scales = "free") +
+  theme_minimal()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  facet_wrap(sex ~ island) +
+  theme_minimal()
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  facet_wrap(sex ~ island, scales = "free_x") +
+  theme_minimal()
+```
+```{r}
+datos |>
+  dplyr::group_by(species) |>
+  dplyr::summarize(body_mass_g = median(body_mass_g)) |>
+  ggplot(aes(x = species, y = body_mass_g)) +
+    geom_col(aes(fill = species), color = NA) +
+    labs(x = "", y = "Masa corporal mediana") +
+    coord_polar() +
+  theme_light() +
+    guides(fill = "none")
+```
+
+```{r}
+datos |>
+  dplyr::group_by(species) |>
+  dplyr::summarize(body_mass_g = median(body_mass_g, na.rm = TRUE)) |>
+  ggplot(aes(x = species, y = body_mass_g)) +
+    geom_col(aes(fill = species), color = NA) +
+    labs(x = "", y = "Masa corporal mediana") +
+    coord_polar() +
+  theme_light() +
+    guides(fill = "none")
+```
+```{r}
+set.seed(2025)
+
+subconjunto <- datos |>
+  dplyr::group_by(species) |>
+  dplyr::sample_frac(0.05)
+
+subconjunto %>% head(n=5)
+```
+
+subconjunto %>% ggplot(aes(x = date, y = temp, color = season)) +
+  geom_point() +
+  geom_label(aes(label = season), hjust = .5, vjust = -.5) +
+  labs(x = "Año", y = "Temperatura (°F)") +
+  xlim(as.Date(c('1997-01-01', '2000-12-31'))) +
+  ylim(c(0, 90)) + theme_light() + theme(legend.position = "none")
+  
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm,
+                           color = species)) +
+  geom_point() +
+  geom_label(aes(label = island), hjust = .5, vjust = -.5) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  theme_light()
+```
+
+```{r}
+library(ggrepel)
+```
+
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm,
+                           color = species)) +
+  geom_point() +
+  geom_label_repel(aes(label = island), fontface = "bold") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Las etiquetas ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(data = datos, size = .5) +
+  geom_point(aes(color = island), size = 1.5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Las etiquetas ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(data = datos, size = .5) +
+  geom_point(aes(color = island), size = 1.5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  annotate(geom = "text", x = 5500, y = 180,
+           fontface = "bold", label = "Un mensaje importante") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Las etiquetas ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(data = datos, size = .5) +
+  geom_point(aes(color = island), size = 1.5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  geom_text(aes(x = 5500, y = 180, label = "Mensaje importante"),
+            stat = "unique", family = "sans",
+            size = 7, color = "darkcyan") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Las etiquetas ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+```{r}
+library(ggtext)
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point(data = datos, size = .5) +
+  geom_point(aes(color = island), size = 1.5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  geom_richtext(aes(x = 4000, y = 200, label = "Mensaje aún más importante"),
+                stat = "unique", angle = 30,
+                color = "white", fill = "magenta",
+                label.color = NA, hjust = 0, vjust = 0, family = "sans") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Las etiquetas ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm, color = island), size = 1.5) +
+  geom_point(data = datos, size = .5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  scale_color_manual(values=c("yellow", "orange", "violet")) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Los colores ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm, color = island), size = 1.5) +
+  geom_point(data = datos, size = .5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  scale_color_manual(values=c("yellow", "orange", "violet")) +
+  scale_fill_manual(values=c("aquamarine", "royalblue", "chocolate")) +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Los colores ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+library(RColorBrewer)
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm, color = island), size = 1.5) +
+  geom_point(data = datos, size = .5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Los colores ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm, color = island), size = 1.5) +
+  geom_point(data = datos, size = .5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  scale_color_brewer(palette = "Greys") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Los colores ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm, color = island), size = 1.5) +
+  geom_point(data = datos, size = .5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "white", fontface = "bold",
+                   segment.color = "grey30") +
+  scale_color_brewer(palette = "Greys") +
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Los colores ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+```{r}
+subconjunto %>% ggplot(aes(x = body_mass_g,
+                           y = flipper_length_mm, color = island), size = 1.5) +
+  geom_point(data = datos, size = .5) +
+  geom_label_repel(aes(label = species, fill = island),
+                   color = "blue", fontface = "bold",
+                   segment.color = "grey30") +
+  scale_color_brewer(palette = "PiYG") +
+  scale_fill_brewer(palette = "Greys") +
+  labs(x = "Masa corporal (g)", y = "Longitud de la ala (mm)") +
+  labs(title = "Los colores ayudan mucho", subtitle = "Pero no abusemos...") +
+  theme_light()
+```
+
+## Tareita
+
++ Explorar la tabla `Batting` de la librería `{Lahman}`
+
++ Ejecuta los siguientes chunks de código:
+
+```{r}
+library(Lahman)
+```
+```{r}
+Batting |> head()
+```
+
+¿Pero y de qué son los datos?
+
+```{r}
+Batting |> str()
+```
+
+
+```{r}
+help(Batting)
+```
+
+```{r}
+datos <- Batting
+```
+
+```{r}
+datos %>% dplyr::group_by(playerID) %>% 
+  summarise(conteo = n()) %>%
+  top_n(20, wt = conteo) %>%
+  arrange(desc(conteo))
+```
+
+```{r}
+datos <- datos |> dplyr::filter(playerID == "mcguide01")
+```
+
+Ahora sólo tenemos datos del jugador con ID "mcguide01"
+
+```{r}
+datos %>% ggplot() +
+  geom_point(aes(x = yearID, y = R))
+```
+
+Empieza a mejorar esta gráfica. Hint: Intenta entender las variables `teamID`, `lgID`, `G`, `AB` y `R`
+
