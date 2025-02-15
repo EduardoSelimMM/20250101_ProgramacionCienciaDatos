@@ -1,0 +1,597 @@
+---
+title: "Sesion 5"
+author: "Eduardo Martínez"
+date: "2025-02-15"
+output: html_document
+---
+
++ Dijimos en sesiones pasadas que hay 4 tipos de objetos fundamentales en R: vectores, listas, matrices y dataframes.
+
++ Sabiendo cómo funcionan estos 4 tipos de objetos, el mundo en mundo en R es nuestro
+
++ Hoy revisaremos el último que nos hace falta y son los Dataframes
+
+# Dataframes
+
++ Los dataframes se muestran en un formato de tabla.
+
++ Los dataframes pueden contener diferentes tipos de datos en su interior. Por ejemplo, la primera columna puede ser de tipo `character`, la segunda y la tercera pueden ser `numeric` o `logical`.
+
++ Sin embargo, cada columna debe tener el mismo tipo de datos: es decir, una columna puede tener sólo número, sólo carácteres y incluso puede ser un dataframe que dentro de éste tenga dataframes.
+
++ ¿Cómo creamos dataframes?
+
++ Hay varias formas... como siempre
+
++ Una de las clásicas es con la función `data.frame()`
+
+```{r}
+mi_dataframe <- data.frame(
+  Paciente = c("Ariel", "Susana", "Oscar", "Alex"),
+  Pulso = c(100, 150, 120, 115),
+  Edad = c(60, 30, 45, 28)
+)
+
+mi_dataframe
+```
++ Veamos qué clase de objeto es el objeto `mi_dataframe`
+
+```{r}
+class(mi_dataframe)
+```
++ También podemos ver qué estructa tiene mi dataframe
+
+```{r}
+str(mi_dataframe)
+```
+
++ Atributos clásicos que queremos saber de un dataframe es cuantas columnas tiene y cuantos renglones
+
+```{r}
+dim(mi_dataframe)
+```
++ Podemos querer sólo el número de renglones
+
+```{r}
+nrow(mi_dataframe)
+```
++ o sólo el número de columnas
+
+```{r}
+ncol(mi_dataframe)
+```
++ Podemos saber cuál es el nombre de nuestras columnas
+
+```{r}
+names(mi_dataframe)
+```
++ R tiene una función para darte un pequeño resumen del contenido de un dataframe
+
+```{r}
+summary(mi_dataframe)
+```
+
++ ¿Cómo accedo a las columnas de un dataframe?
+
++ Primera forma: Por el número de columna
+
+```{r}
+# Accedo a la primera columna de mi dataframe
+mi_dataframe[1]
+```
++ Una propiedad súper agradable de los dataframes es que puedes hacer hacer al NOMBRE de la(s) columna(s)
+
++ Segunda forma: Mediante el nombre de la columna
+
+```{r}
+mi_dataframe["Paciente"]
+```
++ si quiero acceder a lo que está dentro de alguna columna ocupo la notación de [[.]]
+
+```{r}
+mi_dataframe[["Paciente"]]
+```
++ Otra forma de acceder es con el operador `$`
+
+```{r}
+mi_dataframe$Paciente
+```
++ Por supuesto, podemos acceder a más de una columna:
+
++ Primera forma:
+
+```{r}
+mi_dataframe[c("Paciente","Edad")]
+```
++ Otra forma es indicando el número de las columnas que quiero
+
+```{r}
+mi_dataframe[c(2,3)] # quiero las columnas, 2 y 3
+```
++ También puedo acceder a una celda en particular
+
+```{r}
+mi_dataframe[2,3] # quiero la entrada que está en el segundo renglón y tercer columna
+```
++ Puedo acceder a subconjuntos de renglones y de columnas
+
+```{r}
+mi_dataframe[1:2,1:2] # los renglones de 1 a 2 y las columnas de 1 a 2
+```
+
+```{r}
+mi_dataframe[c(1,3),c(2,3)] # Los renglones 1 y 3 y a las columnas 2  y 3
+```
++ También se puede hacer por nombre
+
+```{r}
+mi_dataframe[3,c("Edad", "Pulso")] # renglón 3, de las columnas Edad y Pulso
+```
+
+```{r}
+mi_dataframe[2:3,c("Edad", "Pulso")] # renglón 2 hasta 3, de las columnas Edad y Pulso
+```
+
+```{r}
+mi_dataframe[c(1,3),c("Edad", "Pulso")] # renglón 1 y 3, de las columnas Edad y Pulso
+```
++ ¿Cómo inserto nuevos renglones a un dataframe existente?
+
++ Una forma es con la función rbind(), i.e. apilando (poniendo uno encima de otro) por renglones
+
+```{r}
+nuevo_renglon <- c("Daniel", 110, 45)
+```
+
+```{r}
+mi_dataframe <- rbind(mi_dataframe, nuevo_renglon) # Pego en la parte de abajo al nuevo renglón
+```
+
++ Puedo insertar un renglón en una posición que yo quiera? Sí
+
+```{r}
+nuevo_renglon2 <- c("Eduardo", 120, 75)
+```
+
+```{r}
+mi_dataframe
+```
+
++ ¿Cómo creo nuevas columnas en un dataframe existente?
+
++ Una forma es con la función `cbind()` apilando pero ahora por columnas
+
+```{r}
+nueva_columna <- c(2,5,NA,2,1)
+```
+
+```{r}
+# Aplico la función cbind()
+mi_dataframe <- cbind(mi_dataframe, nueva_columna)
+```
+
+```{r}
+mi_dataframe
+```
+
++ Oye, pero que feo nombre tiene la nueva columna
+
+```{r}
+names(mi_dataframe)
+```
++ Puedo cambiar el nombre de esa columna a uno que me guste más
+
+```{r}
+names(mi_dataframe)[4] <- "NumHijos" # De los nombres de mi dataframe quiero cambiar el 4to
+```
+
+```{r}
+mi_dataframe
+```
+
++ Ptra manera de crear nuevas columnas es insertándola y bautizándola al mismo tiempo con el operador `$`
+
+```{r}
+# Estoy definiendo una nueva columna que se llama Estatura y contiene esos números
+mi_dataframe$Estatura <- c(180, 167, 171, 175, 159)
+```
+
+```{r}
+mi_dataframe
+```
++ También puedo convertir una matriz en un dataframe
+
+```{r}
+# Esta es la matriz que quiero convertir a dataframe
+matriz <- matrix(1:12, ncol = 4)
+matriz
+```
++ Le aplico la función `as.data.frame`
+
+```{r}
+otro_df <- as.data.frame(matriz)
+otro_df
+```
++ ¿Qué tipo de objeto es este?
+
+```{r}
+class(otro_df)
+```
+
++ Hay algunas librerías que además de funciones contienen datasets en forma de dataframes
+
++ En la librería {ggplot2movies} simplemente hay un dataframe con información de algunas películas
+
+```{r}
+library(ggplot2movies)
+```
+
++ El dataframe en esta librería se llama `movies`
+
++ ¿De qué tipo es el objeto con nombre `movies`?
+
+```{r}
+class(movies)
+```
++ ¿Cuántas columnas y cuántos renglones tiene este dataframe?
+
+```{r}
+dim(movies)
+```
+
++ Tiene 58,788 renglones y 24 columnas
+
++ ¿Qué estructura tiene este dataframe?
+
+```{r}
+str(movies)
+```
++ A todo esto... ¿qué información tiene ese dataframe?
+
+```{r}
+# Se me hace que tengo que pedir ayuda
+help(movies)
+```
+
++ Veamos un extracto de dicho dataframe.. para esto ocuparemos la función `head()`, nos muestra los primero 6 renglones del dataframe
+
+```{r}
+movies |> head()
+```
+
++ ¿Qué pasa si quiero que me muestre una cantidad diferente de renglones?
+
+```{r}
+movies |> head(n = 10) # Le indico que quiero ver los primeros 10 renglones
+```
+
++ ¿Qué creen que haga esta instrucción?
+
+```{r}
+movies |> tail()
+```
+
++ Muestra los últimos 6 renglones del dataframe
+
++ Vamos a trabajar un poquito con este dataframe
+
+```{r}
+datos <- movies
+```
+
+```{r}
+datos |> head(n = 10)
+```
+
+```{r}
+datos |> tail(n = 10)
+```
+
+Una manera de acceder a un rango de renglones no necesariamente los últimos o los primeros es con la función `slice`
+
++ Como voy a ocupar un operador de pipa `%>%` (un hermano cercado del operado `|>`) de la librería {dplyr} tengo que mandar llamar a esa librería
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+datos %>% slice(25:42) # los renglones del 25 al 42
+```
+
++ Ya que mencionamos la librería {dplyr}. Esta es una librería muy popular para trabajar con dataframes porque tiene una sintaxis super noble. Aunque tiene muchísimas funciones, las 5 básicas (que se conocen como "verbos del dplyr") son
+
++ arrange(): Ordena la tabla en función a alguna o algunas de las columnas
++ select(): Selecciona alguna o algunas columnas que el usuario le pida
++ filter(): Filtra los renglones que satisfacen alguna condición dada por el usuario
++ join() (left_join, inner_join, outer_join): Permite unir dataframes
++ group_by(): Agrupa el dataframe mediante algunas variables para poder hacer resumenes. Casi siempre viene acompañada de la función `summarize()`
+
++ Empecemos con arrange():
+
+```{r}
+datos |> head()
+```
+
++ Voy a ordenar el dataframe en función de la columna `length`
+
+```{r}
+datos %>% arrange(length)
+```
++ Por default ordena de menor a mayor, incluso alfabeticamente
+
+```{r}
+datos %>% arrange(title) # La columna title tiene strings dentro de ella
+```
+
++ Podemos decirle que la ordene de mayor a menor, con la función desc()
+
+```{r}
+datos |> arrange(desc(length)) |> head()
+```
+
+### Paréntesis
+
++ Como insertar un renglón en una posición que yo quiero
+
+```{r}
+df <- data.frame(team=c('A', 'A', 'A', 'A', 'B', 'B', 'B', 'B'),
+                 points=c(99, 68, 86, 88, 95, 74, 78, 93),
+                 assists=c(22, 28, 31, 35, 34, 45, 28, 31),
+                 rebounds=c(30, 28, 24, 24, 30, 36, 30, 29))
+
+df
+```
++ Primera forma: Horrible (R base)
+
+```{r}
+nuevo_vector <- c("D", 1, 4, 6, 8)
+nuevo_vector
+```
++ Ocuperemos la función rbind()
+
+```{r}
+posicion_favorita <- 3
+```
+
+```{r}
+rbind(df[1:(posicion_favorita-1),], # todos los renglones antes de la posición
+      nuevo_vector, # nuevo renglon
+      df[-(1:(posicion_favorita-1)),]) # resto de los renglones
+```
+
++ Forma terrible!!! Tendría ahora que arreglar el tema de los índices de los renglones
+
++ Forma limpia... Con una función de la librería {dplyr}
+
+```{r}
+df %>% dplyr::add_row(team='C', points=90, assists=40, rebounds=20, .before=posicion_favorita)
+```
+
++ Pero honestamente, no sé para qué quisieran insertar un renglón en una posición específica.
+
+### Cerramos paréntesis
+
++ El segundo verbo es el de seleccionar columnas: select()
+
+```{r}
+datos %>% dplyr::select(title, year, length, budget) # selecciono las columnas a partir de su
+# nombre
+```
+
+
+
+```{r}
+datos %>% dplyr::select(year:r2) # Selecciono desde la columna year, hasta la columna r2
+```
++ También puedo quitar alguna columna, con el operador `-`
+
+```{r}
+datos %>% dplyr::select(-title) 
+```
+```{r}
+datos %>% dplyr::select(-title, -budget) 
+```
+
+```{r}
+datos %>% dplyr::select(-(r1:Short)) # elimino desde la columna r1 hasta la columna Short
+```
++ Hay algunas funciones auxiliares que nos ayudan a seleccionar las columnas sin saber explicitamente sus nombre
+
+```{r}
+# selecciona las columnas cuyo nombre empiece con "r"
+datos %>% select(starts_with("r"))
+```
+
+```{r}
+# Selecciona las columnas cuyo nombre termina con "on"
+datos %>% select(ends_with("on"))
+```
+
+```{r}
+# Selecciona todas las columnas que en su nombre haya alguna "t"
+datos %>% select(contains("t"))
+```
+
+
+```{r}
+# crea un vector "r2", "r3",.. "r5"
+# luego selecciona esos renglones
+datos %>% dplyr::select(num_range("r", 2:5))
+```
+```{r}
+# selecciona la última columna
+datos %>% dplyr::select(last_col())
+```
+
++ Una operación es saber qué valores únicos tiene una columna. Para eso ocupamos la función unique
+
+```{r}
+datos %>% dplyr::select(year) %>% unique()
+```
+
+```{r}
+datos %>% dplyr::select(year) %>% 
+  unique() %>%
+  dplyr::arrange(year)
+```
+
+
+
+```{r}
+datos %>% top_n(10, wt = year) #top 10 con respecto al año
+# todos los renglones que tienen los 10 años más grandes
+```
+Pendiente para la siguiente sesión
+ 
+5<7
+!(5 < 7)
+5>6
+6 <= 6
+6 >= 6
+!(5 < 7) & (5 > 6)
+(!(5 < 7) & (5 > 6)) | (6 <= 6) !(5 < 7) & ((5 > 6) | (6 <= 6))
+
+
++ Otro verbo popular es el verbo filter... filta basado en una condición de los datos
+
+```{r}
+# Escoge todos renglones que tenga año 2000
+datos %>% dplyr::filter(year == 2000)
+```
+
+```{r}
+# Los renglones del año 2000 Y ADEMÁS
+# con duración menor o igual a 120 minutos
+datos %>% dplyr::filter(year == 2000 & length <= 120)
+```
+
+
+```{r}
+datos %>% dplyr::filter(year == 2005 & length >= 90)
+```
+
+```{r}
+datos %>% dplyr::filter(title == "Grease")
+```
+
+
+```{r}
+datos %>% dplyr::filter(Animation == 1 & year >= 2000)
+```
+
+```{r}
+datos %>% dplyr::filter(Animation == 1 & year >= 2000 & Short == 1)
+```
+
+```{r}
+library(babynames)
+```
+
+```{r}
+str(babynames)
+```
+
+```{r}
+datos <- babynames
+```
+
+```{r}
+datos
+```
+
+```{r}
+glimpse(datos)
+```
+
+```{r}
+help("babynames")
+```
+
+
+```{r}
+datos %>%
+  filter(name %in% c("Barack", "Donald", "Mickey", "Minnie", "Taylor"),
+    year >= 2000) %>%
+  arrange(n)
+```
+```{r}
+library(ggplot2)
+```
+
+
+```{r}
+datos %>%
+  filter(name %in% c("Barack", "Donald", "Mickey", "Minnie", "Taylor"),
+    year >= 2000) %>% ggplot() +
+  geom_line(aes(x = year, y = n, group = name, color = name))
+```
+
+```{r}
+datos %>%
+  filter(name %in% c("Taylor"))
+```
+
+```{r}
+datos %>%
+  filter(name %in% c("Barack", "Donald", "Mickey", "Minnie", "Taylor"),
+    year >= 2000) %>% ggplot() +
+  geom_point(aes(x = year, y = n, color = name))
+```
+
+```{r}
+datos %>%
+  filter(name %in% c("Barack", "Donald", "Mickey", "Minnie", "Taylor"),
+    year >= 2000) %>% ggplot() +
+  geom_point(aes(x = year, y = n, color = name, shape = sex))
+```
+
+
+```{r}
+datos %>%
+  filter(name %in% c("Barack", "Donald", "Mickey", "Minnie", "Taylor"),
+    year >= 2000) %>% ggplot() +
+  geom_point(aes(x = year, y = n, color = name, shape = sex)) +
+  facet_wrap(~sex, scales = "free_y") +
+  theme_light()
+```
+
+```{r}
+datos %>% 
+  filter(name %in% c('Nick', 'Kevin', 'Brian', 'Howie', "AJ"), year >= 2000) %>% 
+  ggplot(aes(x = year, y = n, color = name)) + geom_point() +
+  facet_wrap(~sex, scales = "free_y") +
+  theme_light()
+```
+
+
+```{r}
+datos %>% 
+  filter(name %in% c('Ringo', 'John', 'George', 'Paul')) %>% 
+  ggplot(aes(x = year, y = prop, color = name)) + geom_line() +
+  facet_wrap(~sex, scales = "free_y") +
+  theme_light()
+```
+
+```{r}
+datos %>% 
+  filter(name %in% c('Mick', 'Keith', "Celia", "Olivia", "Sandy", "Danny")) %>% 
+  ggplot(aes(x = year, y = prop, color = name)) + geom_line() +
+  facet_wrap(~sex, scales = "free_y") +
+  theme_light()
+```
+
+```{r}
+datos <- readr::read_csv("NetflixDailyTop10.csv")
+```
+slice(5000:5100)
+
+```{r}
+datos %>% head()
+```
+
+
+```{r}
+datos %>% dplyr::filter(Title == "Bridgerton")
+```
+
