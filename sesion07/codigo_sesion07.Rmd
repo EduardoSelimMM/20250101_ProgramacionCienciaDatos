@@ -1,0 +1,452 @@
+---
+title: "Sesión 07"
+author: "Eduardo Martínez"
+date: "2025-02-20"
+output: html_document
+---
+
+```{r}
+switch(EXPR = "dog", dog = "perrito", cat = "gatito", fish = "pececillo")
+```
+
+```{r}
+switch(EXPR = "fish", dog = "perrito", cat = "gatito", fish = "pececillo")
+```
+
+```{r}
+x <- switch(EXPR = "cow", dog = "perrito", cat = "gatito", fish = "pececillo")
+```
+
+```{r}
+x
+```
+
+```{r}
+mi_vector <- 3:17
+metrica <- "media"
+
+switch(metrica, media = mean(mi_vector),
+       mediana = median(mi_vector),
+       maximo = max(mi_vector))
+```
+
+```{r}
+mi_vector <- 3:17
+metrica <- "maximo"
+
+switch(metrica, media = mean(mi_vector),
+       mediana = median(mi_vector),
+       maximo = max(mi_vector))
+```
+
+```{r}
+x <- 5
+y <- 3
+operacion <- "producto"  
+resultado <- switch(operacion,
+                   "suma" = paste("Addition =", x+y),
+                   "resta" = paste("Subtraction =", x-y),
+                   "cociente" = paste("Division = ", x/y),
+                   "producto" = paste("Multiplication =", x*y),
+                   "residuo" = paste("Modulus =", x%%y),
+                   "potencia" = paste("Power =", x^y)
+)
+
+resultado
+```
+
+```{r}
+x <- 5
+y <- 3
+operacion <- " "  
+resultado <- switch(operacion,
+                   "suma" = paste("Addition =", x+y),
+                   "resta" = paste("Subtraction =", x-y),
+                   "cociente" = paste("Division = ", x/y),
+                   "producto" = paste("Multiplication =", x*y),
+                   "residuo" = paste("Modulus =", x%%y),
+                   "potencia" = paste("Power =", x^y)
+)
+
+resultado
+```
+
+```{r}
+switch(
+   5,
+   "El uno soy",
+   "El dos soy",
+   "El tres soy",
+   "El cuatro soy",
+   "El cinco soy",
+   "El seis soy"
+)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+x <- 1:25
+x < 10
+```
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10")
+```
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10",
+  x > 20 ~ "mayor que 20")
+```
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10",
+  x > 20 ~ "mayor que 20",
+  x == 23 ~ "exactmente 23"
+)
+```
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10",
+  x == 23 ~ "exactmente 23",
+  x > 20 ~ "mayor que 20"
+  )
+```
+
+```{r}
+edades <- 18:100
+edades < 25
+```
+
+```{r}
+dplyr::between(edades, 25, 80)
+```
+
+
+
+```{r}
+edades <- 18:100
+dplyr::case_when(
+  edades < 25 ~ "joven",
+  dplyr::between(edades, 25, 80) ~ "adulto"
+)
+```
+
+```{r}
+edades <- 18:100
+dplyr::case_when(
+  edades < 25 ~ 20,
+  dplyr::between(edades, 25, 80) ~ 55
+)
+```
+
+```{r}
+edades <- 18:100
+dplyr::case_when(
+  edades > 80 ~ 90,
+  .default = as.numeric(edades)
+)
+```
+
+
+
+```{r}
+medallas <- c(1,1,1,3,3,3,3,1,2,NA,NA,2,2,1,4)
+# 1 = oro
+# 2 = plata
+# 3 = bronce
+```
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce"
+)
+```
++ Hay otra manera de hacer esto que acabmos de hacer, pero no me encanta
+
+```{r}
+medallas
+```
+
+
+```{r}
+dplyr::case_match(medallas,
+  1 ~ "oro",
+  2 ~ "plata",
+  3 ~ "bronce"
+)
+```
+
+```{r}
+dplyr::case_match(medallas,
+  1 ~ "oro",
+  2 ~ "plata",
+  3 ~ "bronce",
+  NA ~ NA,
+  .default = "error de registro"
+)
+```
+
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  medallas > 3 ~ "error de registro"
+)
+```
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  medallas > 3 ~ "error de registro",
+  is.na(medallas) ~ "no lo anoté"
+)
+```
+
+
+  
+```{r}
+datos <- palmerpenguins::penguins
+```
+
+```{r}
+datos |> mutate(alita_cm = flipper_length_mm/10)
+```
+
+```{r}
+datos |> mutate(alita_cm = flipper_length_mm/10, masa_kg = body_mass_g/1000,
+                area_pico = bill_length_mm*bill_depth_mm)
+```
+```{r}
+datos <- datos |> mutate(alita_cm = flipper_length_mm/10, masa_kg = body_mass_g/1000,
+                area_pico = bill_length_mm*bill_depth_mm)
+```
+
+```{r}
+library(ggplot2)
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = masa_kg, y = alita_cm)) +
+  geom_point(color = "navyblue", shape = "diamond", size = 2)
+```
+
+```{r}
+datos |> mutate(ID_pingui = paste0("pingui", 1:n()))
+```
+
+```{r}
+datos |> mutate(capturista = "Lalo")
+```
+
+
+```{r}
+datos |> mutate(alita = case_when(
+  flipper_length_mm < quantile(flipper_length_mm, probs = 0.25, na.rm = TRUE) ~ "chica",
+  flipper_length_mm > quantile(flipper_length_mm, probs = 0.75, na.rm = TRUE) ~ "grande",
+  is.na(flipper_length_mm) ~ NA,
+  .default = "mediana")
+  )
+```
+
+```{r}
+datos |> mutate(genero = if_else(sex == "female", "hembra", "macho"))
+```
+
+```{r}
+(datos <- palmerpenguins::penguins)
+```
+
+```{r}
+datos |> dplyr::select(species, island, flipper_length_mm, body_mass_g)
+```
+
++ Hay un operador de pipa muy popular
+
++ Se encuentra en la librería {magrittr}, que se pronuncia con acento francés
+
+```{r}
+library(magrittr)
+```
+
+
+```{r}
+datos %<>% dplyr::select(species, island, flipper_length_mm, body_mass_g)
+```
+
+```{r}
+datos
+```
++ Hay otra pipa muy popular en esta librería
+
+```{r}
+(datos <- palmerpenguins::penguins)
+```
+
+¿Cómo obtendrían la media de la columna `flipper_length_mm` de sólo los pingüinos de la isla Torgersen?
+
++ Cómo calcularían la correlación entre las variables `flipper_length_mm` y `body_mass_g` sólo de los pingüinos de la isla Torgersen?
+
+# Introducción a funciones definidas por lxs usuarixs
+
+```
+nombre_de_la_funcion <- function(variables, parametros){
+  cuerpo_de_la_funcion
+}
+```
+
+```{r}
+funcion_perim_circulo <- function(r){
+  2*pi*r
+}
+```
+
+```{r}
+funcion_perim_circulo(r=2)
+```
+
+```{r}
+funcion_perim_circulo(2)
+```
+
+```{r}
+numerillo <- 2
+funcion_perim_circulo(numerillo)
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo(varios_radios)
+```
+
+```{r}
+perimetros <- funcion_perim_circulo(varios_radios)
+perimetros
+```
+
+
+```{r}
+funcion_perim_circulo_chafa <- function(r){
+  pi_chafa <- 3.1416
+  2*pi_chafa*r
+}
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa(varios_radios)
+```
+¿Cuánto vale pi_chafa?
+
+```{r}
+pi_chafa
+```
+
+```{r}
+funcion_perim_circulo_chafa2 <- function(r){
+  pi_chafa <<- 3.1416
+  2*pi_chafa*r
+}
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa2(varios_radios)
+```
+```{r}
+pi_chafa
+```
+
+```{r}
+funcion_hola_mundo <- function(){
+    'Hola mundo!!!'
+}
+```
+
+```{r}
+funcion_hola_mundo()
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  n_x + n_y
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores(primer_vector, segundo_vector)
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores2 <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  c(n_x,n_y)
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores2(primer_vector, segundo_vector)
+```
+
+```{r}
+funcion_area_circulo <- function(r){
+  pi*(r^2)
+}
+```
+```{r}
+funcion_volumen_cilindro <- function(r,h){
+  area_base <- funcion_area_circulo(r)
+  volumen <- area_base*h
+  return(volumen)
+}
+```
+
+
+```{r}
+funcion_volumen_cilindro(4,5)
+```
+
+```{r}
+funcion_volumen_cilindro(r = 4, h = 5)
+```
+
+
+```{r}
+funcion_volumen_anillo <- function(radio_mayor, radio_menor, h){
+  vol_mayor <- funcion_volumen_cilindro(r = radio_mayor, h)
+  vol_menor <- funcion_volumen_cilindro(r = radio_menor, h)
+  vol_total <- vol_mayor - vol_menor
+  return(vol_total)
+}
+```
+
+```{r}
+funcion_volumen_anillo(10,5,20)
+```
+
+```{r}
+funcion_volumen_anillo(radio_mayor = 10, radio_menor = 5,h = 20)
+```
