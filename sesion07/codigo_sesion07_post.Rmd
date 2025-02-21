@@ -1,0 +1,748 @@
+---
+title: "Sesión 07"
+author: "Eduardo Martínez"
+date: "2025-02-20"
+output: html_document
+---
+
++ La semana pasada, vimos algunas estructuras de control: if, ifelse, for, while, next...
+
++ Y nos "faltaba" el switch.
+
++ En realidad, el `switch` de `R` no me gusta mucha... Tiene una idea diferente al que se esperar...
+
++ Como en el de C o Python, en switch permite que basado casos se ejecute ciertas sentencias
+
+```
+switch (
+condicion 1 --> codigo 1
+condicion 2 --> codigo 2
+condicion 3 --> codigo 3
+)
+```
++ Lo que espeamos es no escribir tantos `if`s
+
++ En R, la función está muuuuuuy limitida
+
++ Toma un string y basado en este, una variable puede tomar valores alternativos
+
+```{r}
+# El primer parámetro es obligarorio EXPR y es justamente el string que se busca para cambiar
+switch(EXPR = "dog", dog = "perrito", cat = "gatito", fish = "pececillo")
+```
++ Toma el string "dog" y busca que variable está correspondida con este valor, en este caso "perrito".
+
++ Otro ejemplo:
+
+```{r}
+switch(EXPR = "fish", dog = "perrito", cat = "gatito", fish = "pececillo")
+```
++ ¿Qué pasa si el string EXPR no encuentra coincidencias?
+
+```{r}
+x <- switch(EXPR = "cow", dog = "perrito", cat = "gatito", fish = "pececillo")
+x
+```
++ Como no hay con quien corresponer "cow" me devuelve un valor nulo `NULL`
+
++ Algunos usos populares son el siguiente
+
+```{r}
+mi_vector <- 3:17
+metrica <- "media"
+
+switch(EXPR = metrica,
+       media = mean(mi_vector),
+       mediana = median(mi_vector),
+       maximo = max(mi_vector))
+```
+Lo que nos devuelve es:
+
+```{r}
+mean(mi_vector)
+```
++ Podemos cambiar la métrica y volver a evaluar
+
+```{r}
+mi_vector <- 3:17
+metrica <- "maximo"
+
+switch(EXPR = metrica,
+       media = mean(mi_vector),
+       mediana = median(mi_vector),
+       maximo = max(mi_vector))
+```
++ Otro uso común es
+
+```{r}
+x <- 5
+y <- 3
+operacion <- "producto"  
+resultado <- switch(EXPR = operacion,
+                   "suma" = paste("Addition =", x+y),
+                   "resta" = paste("Subtraction =", x-y),
+                   "cociente" = paste("Division = ", x/y),
+                   "producto" = paste("Multiplication =", x*y),
+                   "residuo" = paste("Modulus =", x%%y),
+                   "potencia" = paste("Power =", x^y)
+)
+
+resultado
+```
+
++ Otro ejemplo
+
+```{r}
+x <- 5
+y <- 3
+operacion <- "potencia"  
+resultado <- switch(EXPR = operacion,
+                   "suma" = paste("Addition =", x+y),
+                   "resta" = paste("Subtraction =", x-y),
+                   "cociente" = paste("Division = ", x/y),
+                   "producto" = paste("Multiplication =", x*y),
+                   "residuo" = paste("Modulus =", x%%y),
+                   "potencia" = paste("Power =", x^y)
+)
+
+resultado
+```
++ Por supuesto si no encuenta una coincidencia, me regresa un nulo
+
+```{r}
+x <- 5
+y <- 3
+operacion <- "cuadrado"  
+resultado <- switch(EXPR = operacion,
+                   "suma" = paste("Addition =", x+y),
+                   "resta" = paste("Subtraction =", x-y),
+                   "cociente" = paste("Division = ", x/y),
+                   "producto" = paste("Multiplication =", x*y),
+                   "residuo" = paste("Modulus =", x%%y),
+                   "potencia" = paste("Power =", x^y)
+)
+
+resultado
+```
+
++ La función tmb admite números y lo que te regresa es el caso del número que le inputaste
+
+```{r}
+switch(5,
+   "El uno soy",
+   "El dos soy",
+   "El tres soy",
+   "El cuatro soy",
+   "El cinco soy",
+   "El seis soy"
+)
+```
++ También te puede devolver un nulo
+
+```{r}
+x <- switch(10,
+   "El uno soy",
+   "El dos soy",
+   "El tres soy",
+   "El cuatro soy",
+   "El cinco soy",
+   "El seis soy"
+)
+x
+```
++ Nos gustaría que fuera una serie de `if`s y la función `switch` de R, no hace eso que esperamos.
+
++ ¿Cómo hacemos varios if's?
+
++ Ocuparemos la función `case_when()` de la librería {dplyr}
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+# Defino un vector con entradas del 1 al 25
+x <- 1:25
+# Dime que entradas de x son menores a 10
+x < 10
+```
++ La función case_when se basa en estas condición
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10")
+```
++ Como no le dí condición para las otras entradas, me dice que no sabe `NA`
+
++ Vamos a arreglarlo poquito a poquito
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10",
+  x > 20 ~ "mayor que 20") # Ahora le digo qué hacer con los núm mayor a 20
+```
++ Como hay entradas que no cumple ninguna de esas dos condicones, me sigue aventando unos NAs
+
++ Vamos poco a poco
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10",
+  x > 20 ~ "mayor que 20",
+  x == 23 ~ "exactmente 23"
+)
+```
++ Es importante el orden de las condiciones
+
+```{r}
+x <- 1:25
+dplyr::case_when(
+  x < 10 ~ "menor que 10",
+  x == 23 ~ "exactmente 23",
+  x > 20 ~ "mayor que 20"
+  )
+```
++ Pero seguimos teniendo un montón de NAs
+
+```{r}
+# DEfino un vector numérico, que va del 18 al 100
+edades <- 18:100
+# ¿La entrada es menor que 25?
+edades < 25
+```
+
+```{r}
+#¿La entrada está entre 25 y 80?
+dplyr::between(edades, 25, 80)
+```
+
+```{r}
+edades <- 18:100
+dplyr::case_when(
+  edades < 25 ~ "joven",
+  dplyr::between(edades, 25, 80) ~ "adulto"
+)
+```
+
++ Sigue habiendo NAs porque no le dije que hacer con las entradas que no cumplen ninguna de esas dos condiciones
+
+```{r}
+edades <- 18:100
+dplyr::case_when(
+  edades < 25 ~ 20, #cambio los menos a 25 por 20
+  dplyr::between(edades, 25, 80) ~ 55 # cambio a los que están entre 25 y 80 por 55
+)
+```
++ Sigo sin decirle qué hacer en los otros casos
+
++ Uso por excelencia
+
+```{r}
+edades <- 18:100
+dplyr::case_when(
+  edades > 80 ~ 90,
+  .default = as.numeric(edades) # y al resto déjalos con su mismo valor numérico
+)
+```
+
++ La aplicación por excelencia para esta función es la recodificación de los valores de una variable
+
++ Alguien me pasó está información
+
+```{r}
+medallas <- c(1,1,1,3,3,3,3,1,2,NA,NA,2,2,1,4)
+# 1 = oro
+# 2 = plata
+# 3 = bronce
+```
+
++ Quiero que en vez de que diga 1, 2 o 3, diga el valor de la medalla
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce"
+)
+```
++ Ups!! Me regresa unos NAs ¿Porqué?
+
++ Los primero dos NAs son de origen, i.e. no sabe evaluar las condiciones
+
++ El último NA es porque no le di condición para evaluar
+
++ Hay otra manera de hacer esto que acabmos de hacer, pero no me encanta y es con la función case_match
+
+```{r}
+dplyr::case_match(medallas,
+  1 ~ "oro",
+  2 ~ "plata",
+  3 ~ "bronce"
+)
+```
++ Me regresa lo mismo que la instrucción anterior pero con una instrucción más corta.
+
++ Me gusta esa sintaxis porque cuando uno `medallas == 3` sabe que se está aplicando una condición y cuando uno solo ve un "3" uno no entiende mucho la sintaxis
+
++ Podemos arreglarle lo de los NAs
+
+```{r}
+dplyr::case_match(medallas,
+  1 ~ "oro",
+  2 ~ "plata",
+  3 ~ "bronce",
+  NA ~ NA,
+  .default = "error de registro"
+)
+```
++ A mí me gusta más esta sintaxis:
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  medallas > 3 ~ "error de registro"
+)
+```
++ Si quiero quitarle esos NAs, lo puedo hacer
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  medallas > 3 ~ "error de registro",
+  is.na(medallas) ~ "no lo anoté"
+)
+```
++ De nuevo, el orden es importante
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  is.na(medallas) ~ "no lo anoté",
+  .default = "registro incorrecto"
+)
+```
+
++ Esta función `case_when` tiene un comportamiento más parecido a lo que esperamos de la función `switch` de python o de C.
+
++ Ahorita creemos que todas estas consideraciones son un poco obvias porque podemos ver con nuestros ojos los NAs y los errores de captura
+
++ Vamos a complicarlo un poquito
+
++ Voy a simular un número muy grande de medallas (1000)
+
+```{r}
+medallas <- sample(x = c(1,2,3,4,NA), size = 1000, replace = TRUE)
+medallas
+```
+
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  is.na(medallas) ~ "no lo anoté",
+  .default = "registro incorrecto"
+) |> table()
+```
++ Ya que estamos aquí usando la función sample en
+
+```
+sample(x = c(1,2,3,4,NA), size = 1000, replace = TRUE)
+```
+puede tomar con la misma probabilidad los valores 1,2,3,4,NA... Uno esperaría que hubiera pocos errores
+
+```{r}
+medallas <- sample(x = c(1,2,3,4,NA), size = 1000, replace = TRUE,
+                   prob = c(0.32, 0.32, 0.32, 0.02, 0.02))
+```
+
+```{r}
+dplyr::case_when(
+  medallas == 1 ~ "oro",
+  medallas == 2 ~ "plata",
+  medallas == 3 ~ "bronce",
+  is.na(medallas) ~ "no lo anoté",
+  .default = "registro incorrecto"
+) |> table()
+```
+# Nuestro último verbo del {dplyr}: mutate
+
++ Este verbo sirve para crear nuevas columnas fácilmente
+
++ Lo tradicional es que se creen nuevas columnas que son transformaciones de las columnas existentes
+
++ Tomemos nuestro dataset de los pingüinos
+  
+```{r}
+datos <- palmerpenguins::penguins
+datos |> head()
+```
+
++ Si yo quisiera una nueva columna con la longitud de ala, pero ahora en cm:
+
+```{r}
+datos |> mutate(alita_cm = flipper_length_mm/10) |> #alita_cm será el nombre de nuestra nueva columna
+  head()
+```
+
++ Puedo generar varias nuevas columnas al mismo tiempo
+
+```{r}
+datos |> mutate(alita_cm = flipper_length_mm/10,
+                masa_kg = body_mass_g/1000, # la variable masa_kg tiene al body_mass pero en kilos
+                area_pico = bill_length_mm*bill_depth_mm) |>
+  head()
+```
+
+```{r}
+# La manera con R base de crear nuevas columnas
+datos$nueva_columna <- rep(6, 344)
+```
+
+```{r}
+datos |> head()
+```
+
+```{r}
+datos$nueva_columna2 <- datos$flipper_length_mm/10
+```
+
+```{r}
+datos |> head()
+```
+
+
+
+```{r}
+datos <- datos |> mutate(alita_cm = flipper_length_mm/10, masa_kg = body_mass_g/1000,
+                area_pico = bill_length_mm*bill_depth_mm)
+```
+
+```{r}
+library(ggplot2)
+```
+
+
+```{r}
+datos %>% ggplot(aes(x = masa_kg, y = alita_cm)) +
+  geom_point(color = "navyblue", shape = "diamond", size = 2)
+```
++ Le puedo crear una columna de ID a cada renglón de este dataset
+
+
+```{r}
+datos |> mutate(ID_pingui = paste0("pingui", 1:n())) |> head()
+```
+
++ También le puedo crear una columna constante
+
+```{r}
+datos |> mutate(capturista = "Lalo")
+```
++ También puedo usar la función case_when para crear una nueva variable, dependiendo de los valores de otra
+
+```{r}
+datos |> mutate(alita = case_when(
+  flipper_length_mm < quantile(flipper_length_mm, probs = 0.25, na.rm = TRUE) ~ "chica",
+  flipper_length_mm > quantile(flipper_length_mm, probs = 0.75, na.rm = TRUE) ~ "grande",
+  is.na(flipper_length_mm) ~ NA,
+  .default = "mediana") # es el else
+  ) |> head()
+```
+
+### Paréntesis
+
+```{r}
+is.na(TRUE)
+```
+
+```{r}
+is.na("Hola")
+```
+
+```{r}
+is.na(7)
+```
+```{r}
+is.na(NA)
+```
+
+### Cierre del paréntesis
+
++ Podemos ocupar el clásico if_else para generar nuevas columnas
+
+```{r}
+datos |> mutate(genero = if_else(sex == "female", "hembra", "macho"))
+```
+
++ Sigamos con nuestro dataset de los pingüinos
+
+```{r}
+(datos <- palmerpenguins::penguins)
+```
+
++ ¿Qué hace la sig instrucción?
+
+```{r}
+datos |> dplyr::select(species, island, flipper_length_mm, body_mass_g)
+```
+
++ Selecciona las columnas species, island, flipper_length_mm, body_mass_g y me las muestra
+
++ Hay un operador de pipa muy popular
+
++ Se encuentra en la librería {magrittr}, que se pronuncia con acento francés
+
+```{r}
+library(magrittr)
+```
+
+Con la instrucción
+
+```
+datos |> dplyr::select(species, island, flipper_length_mm, body_mass_g)
+```
+
+Selecciono y muestro en realidad no he definido o actualizado alguna variable.
+
+Hasta el momento hemos hecho lo sig
+
+```
+datos <- datos |> dplyr::select(species, island, flipper_length_mm, body_mass_g)
+datos
+```
+i.e. selecciono, asigno y muestro
+
++ Si yo quisera operar y asignar al mismo tiempo ocupo la pipa  %<>%
+
+```{r}
+(datos |> dplyr::select(species, island, flipper_length_mm, body_mass_g))
+```
+si yo veo que tiene el objeto datos
+
+```{r}
+datos
+```
+
+
+```{r}
+datos %<>% dplyr::select(species, island, flipper_length_mm, body_mass_g)
+```
+
+
+```{r}
+datos
+```
+En resumen, estas dos operaciones son equivalentes
+
+```
+objeto <- objeto |> operacion1 |> operacion2 ...
+```
+
+```
+objeto %<>% operacion1 |> operacion2 ...
+```
+
++ Hay otra pipa muy popular en esta librería
+
++ Regresemos a nuestro conjunto de datos completo
+
+```{r}
+datos <- palmerpenguins::penguins
+head(datos)
+```
+
++ ¿Cómo obtendrían la media de la columna `flipper_length_mm` de sólo los pingüinos de la isla Torgersen?
+
+```{r}
+datos |> group_by(island) |> 
+  summarise(media = mean(flipper_length_mm, na.rm = TRUE)) |> 
+  dplyr::filter(island == "Torgersen") |>
+  dplyr::select(media) |>
+  as.numeric()
+```
+
+```{r}
+datos1 <- datos |> dplyr::filter(island == "Torgersen")
+datos1$flipper_length_mm |> mean(na.rm = TRUE)
+```
++ tuvimos que crear un objeto intermedio llamado datos1
+
++ Cómo calcularían la correlación entre las variables `flipper_length_mm` y `body_mass_g` sólo de los pingüinos de la isla Torgersen?
+
+```{r}
+datos1 <- datos |> dplyr::filter(island == "Torgersen")
+
+# cor(datos1$flipper_length_mm, datos1$body_mass_g, na.rm = TRUE)
+
+#Error in cor(datos1$flipper_length_mm, datos1$body_mass_g, na.rm = TRUE) : 
+#  unused argument (na.rm = TRUE)
+```
+
++ El operador que les quiero presentar es el operador %$%
+
+```{r}
+datos |> dplyr::filter(island == "Torgersen") |>
+  tidyr::drop_na(flipper_length_mm, body_mass_g) %$%
+  cor(flipper_length_mm, body_mass_g)
+```
+
+
+
+# Introducción a funciones definidas por lxs usuarixs
+
+```
+nombre_de_la_funcion <- function(variables, parametros){
+  cuerpo_de_la_funcion
+}
+```
+
+```{r}
+funcion_perim_circulo <- function(r){
+  2*pi*r
+}
+```
+
+```{r}
+funcion_perim_circulo(r=2)
+```
+
+```{r}
+funcion_perim_circulo(2)
+```
+
+```{r}
+numerillo <- 2
+funcion_perim_circulo(numerillo)
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo(varios_radios)
+```
+
+```{r}
+perimetros <- funcion_perim_circulo(varios_radios)
+perimetros
+```
+
+
+```{r}
+funcion_perim_circulo_chafa <- function(r){
+  pi_chafa <- 3.1416
+  2*pi_chafa*r
+}
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa(varios_radios)
+```
+¿Cuánto vale pi_chafa?
+
+```{r}
+pi_chafa
+```
+
+```{r}
+funcion_perim_circulo_chafa2 <- function(r){
+  pi_chafa <<- 3.1416
+  2*pi_chafa*r
+}
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa2(varios_radios)
+```
+```{r}
+pi_chafa
+```
+
+```{r}
+funcion_hola_mundo <- function(){
+    'Hola mundo!!!'
+}
+```
+
+```{r}
+funcion_hola_mundo()
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  n_x + n_y
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores(primer_vector, segundo_vector)
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores2 <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  c(n_x,n_y)
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores2(primer_vector, segundo_vector)
+```
+
+```{r}
+funcion_area_circulo <- function(r){
+  pi*(r^2)
+}
+```
+```{r}
+funcion_volumen_cilindro <- function(r,h){
+  area_base <- funcion_area_circulo(r)
+  volumen <- area_base*h
+  return(volumen)
+}
+```
+
+
+```{r}
+funcion_volumen_cilindro(4,5)
+```
+
+```{r}
+funcion_volumen_cilindro(r = 4, h = 5)
+```
+
+
+```{r}
+funcion_volumen_anillo <- function(radio_mayor, radio_menor, h){
+  vol_mayor <- funcion_volumen_cilindro(r = radio_mayor, h)
+  vol_menor <- funcion_volumen_cilindro(r = radio_menor, h)
+  vol_total <- vol_mayor - vol_menor
+  return(vol_total)
+}
+```
+
+```{r}
+funcion_volumen_anillo(10,5,20)
+```
+
+```{r}
+funcion_volumen_anillo(radio_mayor = 10, radio_menor = 5,h = 20)
+```
