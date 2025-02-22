@@ -1,0 +1,748 @@
+---
+title: "Sesión 08"
+author: "Eduardo Martínez"
+date: "2025-02-22"
+output: html_document
+---
+
+# Introducción a funciones definidas por lxs usuarixs
+
++ También se conocen como funciones ad-hoc
+
++ Funciones creadas por lxs usuarixs para un fin específico
+
++ Ustedes ya conocen muy funciones de R base y de algunas librerías:
+
+mean(), lenght(), min, max(), mutate()...
+
++ En muchos casos, para evitar reescribir código y tener más orden... se suele escribir funciones.
+
++ En general, la estructura de una función es la siguiente
+
+```
+nombre_de_la_funcion <- function(variables, parametros){
+  cuerpo_de_la_funcion
+  return(resultado)
+}
+```
+
++ Podemos ver que para crear una función se utiliza la función `function()`
+
++ Empecemos con una función muy sencilla, que calcula yo le doy el radio de un círculo y me calcula su perímetro
+
+```{r}
+funcion_perim_circulo <- function(r){
+  2*pi*r
+}
+```
+
++ ¿De qué tipo es el objeto `funcion_perim_circulo`?
+
+```{r}
+funcion_perim_circulo |> class()
+```
+
+¿Cómo aplico esta función?
+
+```
+nombre_de_la_funcion(el valor en la que quiero evaluarla)
+```
+
++ Si quiero inputarle el valor `r=2` a mi función, i.e. calcular el perímetro de una circunferencia con radio 2
+
+```{r}
+funcion_perim_circulo(r=2)
+```
++ R nos permite tener cierta pereza... aunque a mí no me gusta
+
+```{r}
+funcion_perim_circulo(2)
+```
++ Esta notación no me gusta, porque ahora sólo tenemos una variable, pero en general, las funciones tienen más variables y escribir así es confuso
+
++ Una sintaxis más limpia
+
+```{r}
+numerillo <- 2
+funcion_perim_circulo(numerillo)
+```
++ Observación importante: Lo más importante de una función es su cuerpo. Si la sintaxis que usamos permite multiples tipos de objetos, nuestra función también lo hará
+
++ Le puedo aplicar mi función no sólo a un número, sino a un vector de números
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo(varios_radios)
+```
+¿Porqué se puede?
+
++ Por que el cuerpo de nuestra función es `2*pi*r` y la operación `pi*r` puede ser vectorial, por tanto la función `funcion_perim_circulo` también es vectorial
+
+
+```{r}
+varios_radios <- c(2,4,7,8)
+perimetros <- funcion_perim_circulo(varios_radios)
+perimetros
+```
++¿De que clase el objeto `perimetros`?
+
+```{r}
+perimetros |> str()
+```
+
++ Supongamos, que nuestro jefe es muy ingeniero y no le gusta el valor de pi tan completo. A él le gusta aproximar pi por 3.1416
+
++ Vamos a escribir una función que ocupe esta aprox malona de pi
+
+
+```{r}
+funcion_perim_circulo_chafa <- function(r){
+  pi_chafa <- 3.1416
+  2*pi_chafa*r
+}
+```
+
++ Vamos a aplicarla
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa(varios_radios)
+```
++ Supongamos que despiden a mi jefe y me traen uno nuevo y lo primero que me pregunta es ¿cuánto vale pi_chafa?
+
++ ¿Cómo lo obtendrían?
+
++ Inocentemente y me Marca un error
+
+```
+pi_chafa
+Error: object 'pi_chafa' not found
+```
+
++ Este error ocurre, porque la variable pi_chafa esta definida en el ambiente dentro de la función `funcion_perim_circulo_chafa`, no está definida en el ambiente global de nuestra sesión de R
+
++ Para definirla en nuestro ambiente global ocupamos el operador de super asignación `<<-`
+
++ Va de nuevo
+
+```{r}
+funcion_perim_circulo_chafa2 <- function(r){
+  pi_chafa <<- 3.1416 # ocupé super asignación para definir pi_chafa
+  2*pi_chafa*r
+}
+```
+
++ Si ahora me pregunto cuánto vale pi_chafa
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa2(varios_radios)
+```
+
+```{r}
+pi_chafa
+```
++ En que casos creen que sea útil aplicar esta super asignación
+
++ Para ocupar dicha variable en alguna otra función, sin necesidad de definirla de nuevo
+
++ La ventaja es que se genera el objeto `pi_chafa` hasta que se usó la función... no desde siempre.
+
++ Hay funciones que no requieren variables ni parámetros, i.e. ejecutan el cuerpo de la función aún sin variables/parámetros
+
+```{r}
+funcion_hola_mundo <- function(){
+    'Hola mundo!!!'
+}
+```
+
++ ¿Cómo la aplico?
+
+```{r}
+funcion_hola_mundo()
+```
++ También se puede escribir funciones "en una sola línea" o con "sintaxis resumida"... pero a mí no me gusta
+
++ Documentación y comentarios en el código son una carta de amor para mi yo del futuro.
+
+```{r}
+funcion_muy_sencilla <- function(x) x^2*4+x/3
+```
+
++ Vamos a aplicarla
+
+```{r}
+funcion_muy_sencilla(2)
+```
++ Yo creo orden lleva a progreso... Prefiero escribir
+
+```{r}
+funcion_muy_sencilla <- function(x){
+  4*(x^2) + x/3
+}
+```
+
+```{r}
+funcion_muy_sencilla(2)
+```
++ Estas funciones adhoc, se pueden utilizar cuando trabajamos con dataframes
+
+```{r}
+datos <- palmerpenguins::penguins
+head(datos)
+```
+
++ Podría ocupar la función mutate (crea nuevas columnas) utilizando una función que yo defina
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+datos |> dplyr::select(flipper_length_mm) |> 
+  mutate(nueva_col = funcion_muy_sencilla(flipper_length_mm)) |>
+  head()
+```
+
++ Hace que la sintaxis sea muy limpia y fácil de leer
+
+## La famosa lazy evaluation de R
+
++ En R (y en otros lenguajes de programación), las funciones se ejecutan de forma lazy. Esto significa que si algunos argumentos de la función faltan, la función se sigue ejecutando siempre y cuando la ejecución no necesite esos parámetros
+
++ La siguiente función tomará un `nombre` y un `pais`
+
++ Si no se le introduce un `pais` por default ocupará el país "México"
+
+```{r}
+mi_funcion_lazy <- function(nombre, pais = "México"){
+  paste("Mi nombre es", nombre, "y soy de", pais)
+}
+```
+
++ En este caso no le incluiré el parámetro `pais`.. veamos qué pasa?
+
+```{r}
+mi_funcion_lazy("Eduardo")
+```
++ La sintaxis de esta función, dice que para ejecutar `mi_funcion_lazy` yo necesito siempre (i.e. sí o sí) el parámetro `nombre`. El parámetro `pais` no necesariamente lo necesito, en caso de que no esté usaré por default el parámetro `pais = "México"`
+
++ Pero si yo le pongo los dos parámetros
+
+```{r}
+mi_funcion_lazy(nombre = "Eduardo", pais = "España")
+```
+```{r}
+mi_funcion_lazy(pais = "España", nombre = "Eduardo")
+```
++ Gente poco diestra escribiría
+
+```{r}
+mi_funcion_lazy("España", "Eduardo")
+```
++ Es por eso que a mí Lalo, no me gusta gusta la sintaxis posicional
+
++ Si yo le pongo el `pais` pero no el `nombre` me marcará un error
+
+```
+mi_funcion_lazy(pais = "España")
+Error in mi_funcion_lazy(pais = "España") :
+argument "nombre" is missing, with no default
+```
++ ¿Puedo aplicar esta función a un objeto?
+
+```{r}
+mi_frase_favorita <- mi_funcion_lazy(pais = "España", nombre = "Eduardo")
+mi_frase_favorita
+```
+```{r}
+mi_frase_favorita |> str()
+```
+
++ Veamos otro ejemplo
+
+```{r}
+imprime_dim_matriz <- function(x){
+  return(dim(x))
+}
+```
+
+```{r}
+mi_matriz <- matrix(1:12, ncol = 4)
+mi_matriz
+```
+
+```{r}
+imprime_dim_matriz(mi_matriz)
+```
+¿Qué pasa si le aplico esta función a un objeto que no tiene el atributo dimensión?
+
+```{r}
+imprime_dim_matriz(c(1,4,5))
+```
++ Los dataframes tmn tiene el atrubuto dimensión
+
+```{r}
+imprime_dim_matriz(palmerpenguins::penguins)
+```
+
++ Veamos otra función...
+
++ La siguiente función tomará dos vectores y nos devolverá cuántos NAs hay en esos dos vectores
+
+```{r}
+fn_conteo_NAs_dos_vectores <- function(x,y){
+  n_x <- is.na(x) |> sum() # numero de NAs del vector x
+  n_y <- is.na(y) |> sum() # número de NAs del vector y
+  n_x + n_y # sumo los NAs de x e y
+}
+```
+
++ Vamos a aplicar nuestra función
+
+```{r}
+(primer_vector <- c(1:3, NA, NA, 7, 9, 6))
+```
+
+```{r}
+(segundo_vector <- c(NA, NA, 4:8, NA, NA, NA))
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores(primer_vector, segundo_vector)
+```
++ ¿Qué pasa si no quisiera los NAs de ambos vector juntos sino separados?
+
+```{r}
+fn_conteo_NAs_dos_vectores2 <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  return(c(n_x,n_y)) # cambié lo que devuelve la función
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores2(primer_vector, segundo_vector)
+```
++ ¿Podríamos mejorar lo que nos devuelve?
+
+```{r}
+fn_conteo_NAs_dos_vectores3 <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  resultado <- c(n_x,n_y)
+  names(resultado) <- c("primer_vector", "segundo_vector")
+  return(resultado) # cambié lo que devuelve la función
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores3(primer_vector, segundo_vector)
+```
++ Las funciónes nos pueden devolver diferentes tipos de objetos
+
++ Esta función toma la base y la altura (de un rectángulo) y te devulve su area y perímetro pero en forma de lista
+
+```{r}
+fn_rectangulo <- function(b,h){
+  area <- b*h
+  perim <- 2*(b+h)
+  resultado <- list("Area" = area, "Perimetro" = perim)
+  return(resultado)
+}
+```
+
+```{r}
+fn_rectangulo(b = 5, h = 2)
+```
++ Por supuesto podemos usar funciones dentro de otras funciones
+
++ Primero creemos una función que calcula el área de un círculo dado su radio
+
+```{r}
+funcion_area_circulo <- function(r){
+  pi*(r^2)
+}
+```
+
++ Ahora crearemos una función que calcula el volumen de un cilindro dados el radio de su base y su altura
+
+```{r}
+funcion_volumen_cilindro <- function(r,h){
+  area_base <- funcion_area_circulo(r) # Aplicamos la función que generé antes
+  volumen <- area_base*h
+  return(volumen)
+}
+```
+
++ De esta manera, es más sencillo leer el código de nuestra función
+
++ Vamos a aplicar esta segunda función para un cilindro con radio 4 y altura 5
+
+```{r}
+funcion_volumen_cilindro(4,5)
+```
++ Pero como somos procariontes salvajes, preferimos escribir
+
+```{r}
+funcion_volumen_cilindro(r = 4, h = 5)
+```
++ De hecho, podemos seguir ocupando esas funciones
+
++ Voy a crear una función que calcula el volumen de un anillo cilíndrico dados su radio menor, su radio mayor y su altura
+
+```{r}
+funcion_volumen_anillo <- function(radio_mayor, radio_menor, h){
+  # Calculo el volumen del cilindro grande aplicando mi función volumen cilidro
+  vol_mayor <- funcion_volumen_cilindro(r = radio_mayor, h)
+  # Calculo el volumen del cilindro chico aplicando mi función volumen cilidro
+  vol_menor <- funcion_volumen_cilindro(r = radio_menor, h)
+  # Resto el volumen grande al volumen chico
+  vol_total <- vol_mayor - vol_menor
+  return(vol_total)
+}
+```
+
++ Vamos a aplicarla
+
+```{r}
+funcion_volumen_anillo(10,5,20)
+```
++ Pero como no somos procariontes salvajes, prefiero escribir
+
+```{r}
+funcion_volumen_anillo(radio_mayor = 10, radio_menor = 5,h = 20)
+```
++ También podemos ocupar las estructuras de control (if, for, while) dentro de una función
+
++ Vamos a crear una función que me diga si un número es par o impar
+
+```{r}
+funcion_paridad <- function(x){
+  if(x %% 2 == 0) # si el residulo al divir entre 2
+    return("par")
+  else
+    return("impar")
+}
+```
+
++ Vamos a aplicarla
+
+```{r}
+funcion_paridad(5)
+```
++ ¿Qué pasa si le quisiera aplicar esta función a un vector?
+
++ Inocentemente quisieramos hacer la aplicación al vector (1,2,3,4,5)
+
++ Nos devolverá un error
+
+```
+funcion_paridad(1:5)
+Error in if (x%%2 == 0) return("par") else return("impar") : 
+  the condition has length > 1
+```
+
++ Hay varias maneras de arreglarlo
+
+```{r}
+funcion_paridad_vectorial <- function(x){
+  for(i in seq_along(x)){
+    print(funcion_paridad(x[i]))
+  }
+}
+```
+
+```{r}
+funcion_paridad_vectorial(1:5)
+```
++ Pero estos son varios objetos de long 1, ¿Cómo lo meto a un vector?
+
+```{r}
+funcion_paridad_vectorial <- function(x){
+  resultado <- c() # Defino un vector vacío
+  for(i in seq_along(x)){
+    #print(funcion_paridad(x[i]))
+    resultado_i <- funcion_paridad(x[i])
+    resultado <- c(resultado, resultado_i)
+  }
+  return(resultado)
+}
+```
+
+```{r}
+funcion_paridad_vectorial(1:5)
+```
++ Pero recuerden que la recomendación es usar lo menos posible FORs
+
++ Otra solución
+
+```{r}
+funcion_paridad <- function(x){
+  condicion_par <- x %% 2 == 0 # TRUE o FALSE
+  resultado <- dplyr::case_when(
+    condicion_par ~ "par",
+    .default = "impar")
+  return(resultado)
+}
+```
+
+```{r}
+funcion_paridad(1:5)
+```
+## El cielo es el infierno de las funciones
+
++ En general, hay que pensar que las funciones se utilizarán varias veces y a veces las utilizarán otras personas diferentes a la que escribieron la función...
+
++ Entonces hay que pensar en posibles "usos equivocados" de la función por parte de otro usuario.... Partamos de un ejemplo:
+
++ Recuérdese que el promedio ponderado de un conjunto de números $x_1,x_2,\ldots,x_n$ con ponderaciones $w_1,w_2,\ldots,w_n$ es
+
+$$\frac{w_1x_1 + w_2x_2+\ldots + w_nx_n}{w_1+w_2+ \ldots +w_n}$$
++ Escribamos una función para calcular esto
+
+```{r}
+promedio_ponderado <- function(x, w){
+  sum(x * w) / sum(w)
+  }
+```
+
++ Vamos a aplicarlo
+
+```{r}
+promedio_ponderado(x = c(2,3,4), w = c(7,8,9))
+```
+
++ Un usuario con poca experiencia podría no saber que los vectores x y w deben tener la misma longitud e intentar inocentemente
+
++ y por supuesto devuelve un error
+
+```
+promedio_ponderado(x = c(2,4,6,7,8,9), w = c(1,2,3,4))
+Warning: longer object length is not a multiple of shorter object length
+```
++ peor aún puede ejecutarse pero no ser lo que el autor de la función quería
+
+```{r}
+promedio_ponderado(x = c(2,4,6,7,8,9), w = c(1,2,3))
+```
++ Ohh!! se ejecutó aun cuando los vectores x y w no tienen la misma longitud ¿entonces qué paso?
+
++ Lo que pasa es que la función `*` se quiere pasar de lista
+
+```{r}
+c(2,4,6,7,8,9) * c(1,2,3)
+```
++ Lo que hace es que copia el segundo vector para que le alcance la multiplicación con el primer vector.
+
++ Que lo pueda hacer, no significa que este correcto en el contexto de lo que nuestra función quiere
+
++ Hay que agregarle algunas restricciones a la función en caso de que el usuario no la use bien
+
++ Tengo que obligar al usuario a que x y w tengan la misma longitud
+
+```{r}
+promedio_ponderado <- function(x, w) {
+  if (length(x) != length(w)) { # si tienen longitud diferente detente y ayuda al usuario
+    stop("`x` y `w` deben tener la misma longitud", call. = FALSE)
+  }
+  sum(w * x) / sum(w) # si el usuario lo hizo bien, sigue con el cálculo
+}
+```
+
++ Ejecutemoslo
+
+```
+promedio_ponderado(x = c(2,4,6,7,8,9), w = c(1,2,3,4))
+Error: `x` y `w` deben tener la misma longitud
+```
+
+```{r}
+promedio_ponderado(x = c(2,3,4), w = c(7,8,9))
+```
++ Otro posible error inconsciente del usuario es que quiera calcular este promedio en un vector que tiene NAs
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9))
+```
+
++ Funciona, pero me devuelve lo que estoy esperando... que es un número
+
++ Vamos a ponerle un tercer parámetro a nuestra función... le agregaré un booleano que me indique si quiero quitar los NAs
+
+```{r}
+promedio_ponderado <- function(x, w, quita_na = FALSE){
+  if (length(x) != length(w)) {
+    stop("`x` y `w` deben tener la misma longitud", call. = FALSE)
+  }
+  if(quita_na){ # Si quita_na = TRUE
+    faltantes <- is.na(x) | is.na(w) # posiciones de los NAs
+    x <- x[!faltantes]
+    w <- w[!faltantes]
+  }
+  sum(w * x) / sum(w)
+}
+```
+
++ Vamos a evaluarlo
+
++ En la siguiente línea, el usuario no me ha autorizado a quitar NAs
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9))
+```
++ Necesito que el usuario lo autorice explícitamente
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = TRUE)
+```
+
++ Ya nos devuelve lo que esperábamos
+
+### Paréntesis
+
++ Las condicionales reciben un booleano.
+
++ La mayoría de las veces, le inputamos ese Booleano mediante una condición
+
+```{r}
+x <- 8
+if(x > 5){
+  print(x)
+  }
+```
+Pero en realidad podríamos escribir
+
+```{r}
+x <- 8
+condicion <- x > 5 # Esto ya es un booleano
+if(condicion){
+  print(x)
+  }
+```
+```{r}
+x <- 8
+condicion <- x < 3 # Esto ya es un booleano
+if(condicion){
+  print(x)
+  }
+```
+
+No pasó nada en la ejecución de este chunk, porque `condicion` es FALSE
+
+### Termina paréntesis
+
++ El usuario de la función puede seguir sin saber usarla, por ejemplo puede intentar
+
++ El siguiente código, me regresa un error
+
+```
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = "YES")
+Error in if (quita_na) { : argument is not interpretable as logical
+```
+
++ Vamos a darle ayuda al usuario
+
+
+```{r}
+promedio_ponderado <- function(x, w, quita_na = FALSE) {
+  if(length(x) != length(w)){
+    stop("`x` y `w` deben tener la misma longitud", call. = FALSE)
+  }
+  #### Esto es lo nuevo que agregué
+  if(!is.logical(quita_na)){ # si me da na cosa que no sea un booleano, páralo
+    stop("`quita_na` debe ser TRUE o FALSE sin comillas")
+  }
+  ####
+  if(quita_na){
+    faltantes <- is.na(x) | is.na(w)
+    x <- x[!faltantes]
+    w <- w[!faltantes]
+  }
+  sum(w * x) / sum(w)
+}
+```
+
++ Me sigue marcando error, pero ya le doy cierta guía al usuario
+
+```
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = "YES")
+Error in promedio_ponderado(x = c(2, NA, 4), w = c(7, 8, 9), quita_na = "YES") :
+`quita_na` debe ser TRUE o FALSE sin comillas
+```
++ El usuario sigue sin leer bien mi recomendación
+
++ Me sigue marcando error...
+
+```
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = "TRUE")
+Error in promedio_ponderado(x = c(2, NA, 4), w = c(7, 8, 9), quita_na = "TRUE") :
+`quita_na` debe ser TRUE o FALSE sin comillas
+```
+
++ Por fin lo logra el usuario
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = TRUE)
+```
+Por fin lo logró!!!!
+
++ Otro ejemplo, si yo quisiera calcular la moda de un vector categórico
+
+
+```{r}
+obten_moda <- function(x){
+   return(names(which.max(table(x))))
+}
+```
+
++ Es un infierno leer lo que hace esta función... aunque por supuesto funciona
+
+```{r}
+obten_moda(c("hola", "hola", "adios"))
+```
++ Puedo cambiar la sintaxis para que sea más fácil de leer el código
+
+```{r}
+obten_moda <- function(x){
+  moda = x |> table() |> which.max() |> names()
+  return(moda)
+}
+```
+
+```{r}
+obten_moda(c("hola", "hola", "adios", "feliz", "feliz", "feliz"))
+```
+
+```{r}
+obten_moda(c(1,2,3,4,5,5,5,5,5,5))
+```
++ ¿Qué pasa si tengo más de una moda?
+
+```{r}
+obten_moda(c("hola", "hola", "hola", "adios", "feliz", "feliz", "feliz"))
+```
++ Ups! No me está devolviendo lo que yo quiero... veamos porqué
+
+```{r}
+x <- c("hola", "hola", "hola", "adios", "feliz", "feliz", "feliz")
+x |> table()
+```
+
+```{r}
+x <- c("hola", "hola", "hola", "adios", "feliz", "feliz", "feliz")
+x |> table() |> which.max()
+```
++ Justo en este paso se voló el "hola".. El problema está en el which.max
+
++ Vamos a help(which.max)
+
++ Después de ver su documentación, no hay algún parámetro que pueda cambiar y no me elimine a otros factores que también tiene frecuencia máxima.
+
++ Tengo que usar una función diferente al which.max...
+
++ Pendiente para la siguiente clase...
