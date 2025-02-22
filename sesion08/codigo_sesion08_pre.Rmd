@@ -1,0 +1,367 @@
+---
+title: "Sesión 0X"
+author: "Eduardo Martínez"
+date: "2025-02-XX"
+output: html_document
+---
+
+# Introducción a funciones definidas por lxs usuarixs
+
+```
+nombre_de_la_funcion <- function(variables, parametros){
+  cuerpo_de_la_funcion
+}
+```
+
+```{r}
+funcion_perim_circulo <- function(r){
+  2*pi*r
+}
+```
+
+```{r}
+funcion_perim_circulo(r=2)
+```
+
+```{r}
+funcion_perim_circulo(2)
+```
+
+```{r}
+numerillo <- 2
+funcion_perim_circulo(numerillo)
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo(varios_radios)
+```
+
+```{r}
+perimetros <- funcion_perim_circulo(varios_radios)
+perimetros
+```
+
+
+```{r}
+funcion_perim_circulo_chafa <- function(r){
+  pi_chafa <- 3.1416
+  2*pi_chafa*r
+}
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa(varios_radios)
+```
+¿Cuánto vale pi_chafa?
+
+```{r}
+pi_chafa
+```
+
+```{r}
+funcion_perim_circulo_chafa2 <- function(r){
+  pi_chafa <<- 3.1416
+  2*pi_chafa*r
+}
+```
+
+```{r}
+varios_radios <- c(2,4,7,8)
+funcion_perim_circulo_chafa2(varios_radios)
+```
+```{r}
+pi_chafa
+```
+
+```{r}
+funcion_hola_mundo <- function(){
+    'Hola mundo!!!'
+}
+```
+
+```{r}
+funcion_hola_mundo()
+```
+
+```{r}
+funcion_muy_sencilla <- function(x) x^2*4+x/3
+```
+
+```{r}
+funcion_muy_sencilla(2)
+```
+```{r}
+funcion_muy_sencilla <- function(x){
+  4*(x^2) + x/3
+}
+```
+
+```{r}
+funcion_muy_sencilla(2)
+```
+## La famosa lazy evaluation de R
+
+En R, las funciones se ejecutan de forma lazy. Esto significa que si algunos argumento faltan, la función se sigue ejecutando siempre y cuando la ejecución no necesite esos parámetros
+
+```{r}
+mi_funcion_lazy <- function(nombre, pais = "México"){
+  paste("Mi nombre es", nombre, "y soy de", pais)
+}
+```
+
+```{r}
+mi_funcion_lazy("Eduardo")
+```
+
+```{r}
+mi_funcion_lazy("Eduardo", "España")
+```
+
+```{r}
+mi_funcion_lazy(nombre = "Eduardo", pais = "España")
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  n_x + n_y
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores(primer_vector, segundo_vector)
+```
+
+```{r}
+fn_conteo_NAs_dos_vectores2 <- function(x,y){
+  n_x <- is.na(x) |> sum()
+  n_y <- is.na(y) |> sum()
+  c(n_x,n_y)
+}
+```
+
+```{r}
+primer_vector <- c(1:3, NA, NA, 7, 9, 6)
+segundo_vector <- c(NA, NA, 4:8, NA, NA, NA)
+fn_conteo_NAs_dos_vectores2(primer_vector, segundo_vector)
+```
+
+```{r}
+fn_rectangulo <- function(b,h){
+  area <- b*h
+  perim <- 2*(b+h)
+  resultado <- list("Area" = area, "Perimetro" = perim)
+  return(resultado)
+}
+```
+
+```{r}
+fn_rectangulo(b = 5, h = 2)
+```
+
+```{r}
+funcion_area_circulo <- function(r){
+  pi*(r^2)
+}
+```
+
+```{r}
+funcion_volumen_cilindro <- function(r,h){
+  area_base <- funcion_area_circulo(r)
+  volumen <- area_base*h
+  return(volumen)
+}
+```
+
+```{r}
+funcion_volumen_cilindro(4,5)
+```
+
+```{r}
+funcion_volumen_cilindro(r = 4, h = 5)
+```
+
+
+```{r}
+funcion_volumen_anillo <- function(radio_mayor, radio_menor, h){
+  vol_mayor <- funcion_volumen_cilindro(r = radio_mayor, h)
+  vol_menor <- funcion_volumen_cilindro(r = radio_menor, h)
+  vol_total <- vol_mayor - vol_menor
+  return(vol_total)
+}
+```
+
+```{r}
+funcion_volumen_anillo(10,5,20)
+```
+
+```{r}
+funcion_volumen_anillo(radio_mayor = 10, radio_menor = 5,h = 20)
+```
+
+```{r}
+funcion_paridad <- function(x){
+  if(x %% 2 == 0)
+    return("par")
+  else
+    return("impar")
+}
+```
+
+```{r}
+funcion_paridad(5)
+```
+
+```{r}
+funcion_paridad(1:5)
+```
+
+```{r}
+funcion_paridad <- function(x){
+  condicion_par <- x %% 2 == 0
+  resultado <- dplyr::case_when(
+    condicion_par ~ "par",
+    .default = "impar")
+  return(resultado)
+}
+```
+
+```{r}
+funcion_paridad(1:5)
+```
+
++ En general, hay que pensar que las funciones se utilizarán varias veces y a veces las utilizarán otras personas diferentes a la que escribieron la función...
+
++ Recuérdese que el promedio ponderado de un conjunto de números $x_1,x_2,\ldots,x_n$ con ponderaciones $w_1,w_2,\ldots,w_n$ es
+
+$$\frac{w_1x_1 + w_2x_2+\ldots + w_nx_n}{w_1+w_2+ \ldots +w_n}$$
++ Escribamos una función para esto
+
+```{r}
+promedio_ponderado <- function(x, w){
+  sum(x * w) / sum(w)
+  }
+```
+
+```{r}
+promedio_ponderado(c(2,3,4), c(7,8,9))
+```
+```{r}
+promedio_ponderado(x = c(2,3,4), w = c(7,8,9))
+```
+
+
+```{r}
+promedio_ponderado(x = c(2,4,6,7,8,9), w = c(1,2,3))
+```
+
+```{r}
+c(2,4,6,7,8,9) * c(1,2,3)
+```
+
+```{r}
+promedio_ponderado(x = c(2,4,6,7,8,9), w = c(1,2,3,4))
+```
+```{r}
+promedio_ponderado <- function(x, w) {
+  if (length(x) != length(w)) {
+    stop("`x` y `w` deben tener la misma longitud", call. = FALSE)
+  }
+  sum(w * x) / sum(w)
+}
+```
+
+```{r}
+promedio_ponderado(x = c(2,4,6,7,8,9), w = c(1,2,3,4))
+```
+
+```{r}
+promedio_ponderado(c(2,NA,4), c(7,8,9))
+```
+
+```{r}
+promedio_ponderado <- function(x, w, quita_na = FALSE) {
+  if (length(x) != length(w)) {
+    stop("`x` y `w` deben tener la misma longitud", call. = FALSE)
+  }
+  if (quita_na) {
+    faltantes <- is.na(x) | is.na(w)
+    x <- x[!faltantes]
+    w <- w[!faltantes]
+  }
+  sum(w * x) / sum(w)
+}
+```
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = TRUE)
+```
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = "YES")
+```
+
+```{r}
+promedio_ponderado <- function(x, w, quita_na = FALSE) {
+  if(length(x) != length(w)){
+    stop("`x` y `w` deben tener la misma longitud", call. = FALSE)
+  }
+  if(!is.logical(quita_na)){
+    stop("`quita_na` debe ser TRUE o FALSE sin comillas")
+  }
+  if(quita_na){
+    faltantes <- is.na(x) | is.na(w)
+    x <- x[!faltantes]
+    w <- w[!faltantes]
+  }
+  sum(w * x) / sum(w)
+}
+```
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = "YES")
+```
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = "TRUE")
+```
+
+```{r}
+promedio_ponderado(x = c(2,NA,4), w = c(7,8,9), quita_na = TRUE)
+```
+
+```{r}
+obten_moda <- function(x){
+   return(names(which.max(table(x))))
+}
+```
+
+```{r}
+obten_moda(c("hola", "hola", "adios"))
+```
+
+```{r}
+obten_moda <- function(x){
+  moda = x |> table() |> which.max() |> names()
+  return(moda)
+}
+```
+
+```{r}
+library(palmerpenguins)
+library(dplyr)
+```
+
+
+```{r}
+datos <- palmerpenguins::penguins
+head(datos)
+```
+
+
+
