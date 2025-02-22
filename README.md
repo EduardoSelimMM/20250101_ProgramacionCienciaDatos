@@ -15,3 +15,5 @@
 - [Sesion 5: 15 de febrero de 2025](./sesion05)
 - [Sesion 6: 18 de febrero de 2025](./sesion06)
 - [Sesion 7: 20 de febrero de 2025](./sesion07)
+- [Sesion 8: 22 de febrero de 2025](./sesion08)
+- [Sesion 9: 25 de febrero de 2025](./sesion09) última sesión
