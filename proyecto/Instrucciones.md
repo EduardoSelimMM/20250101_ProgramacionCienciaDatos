@@ -2,6 +2,8 @@
 
 El proyecto final se realizará en **equipos de 3 personas**. Las tres personas tendrán que crear repositorios: dos personas en local y una en remoto. El repositorio remoto se considerará como un repositorio colaborativo, en el que las 3 personas trabajarán.
 
+## Primera parte
+
 Se documenta mediante screenshots en un archivo de Google Doc (i.e. un archivo de Word de Google).
 
 Cada persona tomará uno de los siguientes roles:
@@ -54,7 +56,9 @@ mis_datos <- readr::read_csv("datos_proyecto.csv")
 
 Cada colaborador debe clonar el repositorio en su máquina:
 
+```
 git clone https://github.com/usuario/ccolaboracion-git-equipo-n.git
+```
 
 3. Colaborador 1: Desde su máquina crear chunks de código R en el archivo "proyecto_final.Rmd" (que obtuvo del Administrador) que calculen la media de x, la media de y, la desviación estándar de x, la desviación estándar de y, la correlación de Pearson entre x y y, PARA CADA SUBCONJUNTO, usando ciclos for. Hacer commit y push del código al repositorio del administrador y hacer un pull request.
 
