@@ -30,6 +30,7 @@ Sube al repositorio el archivo "datos_proyecto.csv"
 
 Crea, desde GitHub, el archivo "proyecto_final.Rmd" con el siguiente contenido
 
+```
 ---
 title: "Proyecto final módulo 1"
 author: "Equipo - n"
@@ -50,6 +51,7 @@ library(ggplot2)
 
 ```{r}
 mis_datos <- readr::read_csv("datos_proyecto.csv")
+```
 ```
 
 2. Clonar el repositorio (Colaboradores 1 y 2, Administrador)
