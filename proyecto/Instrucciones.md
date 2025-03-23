@@ -47,9 +47,7 @@ output: html_document
 library(dplyr)
 library(readr)
 library(ggplot2)
-```
 
-```{r}
 mis_datos <- readr::read_csv("datos_proyecto.csv")
 ```
 
