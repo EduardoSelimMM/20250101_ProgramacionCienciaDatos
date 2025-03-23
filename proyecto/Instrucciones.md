@@ -52,7 +52,6 @@ library(ggplot2)
 ```{r}
 mis_datos <- readr::read_csv("datos_proyecto.csv")
 ```
-```
 
 2. Clonar el repositorio (Colaboradores 1 y 2, Administrador)
 
