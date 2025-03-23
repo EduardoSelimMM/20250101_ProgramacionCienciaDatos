@@ -40,8 +40,8 @@ output: html_document
 # Integrantes:
 
 + Integrante 1. Rol: Administrador
-+ Integrante 2. Rol: Colaborador
-+ Integrante 3. Rol: Colaborador
++ Integrante 2. Rol: Colaborador 1
++ Integrante 3. Rol: Colaborador 2
 
 ```{r}
 library(dplyr)
@@ -68,6 +68,8 @@ git clone https://github.com/usuario/ccolaboracion-git-equipo-n.git
 6. Obtener la versión actualizada del repositorio (Colaboradores 1 y 2, Administrador)
 
 7. Cada colaborador debe hacer pull (jalar) el contenido actualizado del repositorio a su máquina. Los 3 archivos .Rmd de cada computadora deben ser idénticos entre sí.
+   
+9. El colaborador 1 debe ejecutar el código actualizado y dar conclusiones sobre cada uno de los subconjuntos de datos
 
 ## Segunda parte
 
