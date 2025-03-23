@@ -68,3 +68,7 @@ git clone https://github.com/usuario/ccolaboracion-git-equipo-n.git
 6. Obtener la versión actualizada del repositorio (Colaboradores 1 y 2, Administrador)
 
 7. Cada colaborador debe hacer pull (jalar) el contenido actualizado del repositorio a su máquina. Los 3 archivos .Rmd de cada computadora deben ser idénticos entre sí.
+
+## Segunda parte
+
+En construcción...
