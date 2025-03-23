@@ -61,10 +61,10 @@ git clone https://github.com/usuario/ccolaboracion-git-equipo-n.git
 
 3. Colaborador 1: Desde su máquina crear chunks de código R en el archivo "proyecto_final.Rmd" (que obtuvo del Administrador) que calculen la media de x, la media de y, la desviación estándar de x, la desviación estándar de y, la correlación de Pearson entre x y y, PARA CADA SUBCONJUNTO, usando ciclos for. Hacer commit y push del código al repositorio del administrador y hacer un pull request.
 
-4. Colaborador 2: Desde su máquina crear chunks de código R en el archivo "proyecto_final.Rmd" (que obtuvo del Administrador) que calculen la media de x, la media de y, la desviación estándar de x, la desviación estándar de y, la correlación de Pearson entre x y y, PARA CADA SUBCONJUNTO, usando verbos de la librería {dplyr}. Hacer commit y push del código al repositorio del administrador y hacer un pull request.
+4. Colaborador 2: Desde su máquina crear chunks de código R en el archivo "proyecto_final.Rmd" (que obtuvo del Administrador) que calculen la media de x, la media de y, la desviación estándar de x, la desviación estándar de y, la correlación de Pearson entre x y y, PARA CADA SUBCONJUNTO, usando verbos de la librería {dplyr}. Debe corregir la línea `author: "Equipo - n"` con el número correcto de equipo y agregar los nombres completos de los integrantes en la sección de `# Integrantes`. Hacer commit y push del código al repositorio del administrador y hacer un pull request.
 
 5. Administrador del equipo. Desde su máquina crear chunks de código R en el archivo "proyecto_final.Rmd" (que obtuvo del Administrador) que trafiquen con ggplot las parejas de valores (x,y) DE CADA SUBCONJUNTO. Hacer commit y push del código al repositorio del administrador y revisar los pull requests de los colaboradores 1 y 2.
 
 6. Obtener la versión actualizada del repositorio (Colaboradores 1 y 2, Administrador)
 
-Cada colaborador debe hacer pull (jalar) el contenido actualizado del repositorio a su máquina. Los 3 archivos .Rmd de cada computadora deben ser idénticos entre sí.
+7. Cada colaborador debe hacer pull (jalar) el contenido actualizado del repositorio a su máquina. Los 3 archivos .Rmd de cada computadora deben ser idénticos entre sí.
