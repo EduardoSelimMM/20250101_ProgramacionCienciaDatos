@@ -1,8 +1,8 @@
 Equipo 1
 
-José Manuel Ramírez Velasco
-Daniel Eduardo Raya Maldonado
-Marcial Martínez Alcántara 
++ José Manuel Ramírez Velasco
++ Daniel Eduardo Raya Maldonado
++ Marcial Martínez Alcántara 
 
 Equipo 2
 
