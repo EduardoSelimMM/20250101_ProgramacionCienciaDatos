@@ -1,8 +1,8 @@
-Equipo 1
+**Equipo 1 (Actualizado)**
 
-+ José Manuel Ramírez Velasco
-+ Daniel Eduardo Raya Maldonado
-+ Marcial Martínez Alcántara 
++ Joshua Abraham Fuentes Maximo
++ Aviles Roldán Itzel Yamilen
++ Peralta Mendoza Maria del Carmen
 
 Equipo 2
 
@@ -130,13 +130,13 @@ Equipo 22
 + Eduardo Reyes Román
 + Vital Arana José Andrés de Jesús
 
-Equipo 23 (actualizado)
+**Equipo 23 (actualizado)**
 
 + Jorge Alberto Cruz García
 + Marcial Martínez Alcántara
 + Cristopher Alejandro García Azamar
 
-Equipo 24 (actualizado)
+**Equipo 24 (actualizado)**
 
 + Martínez Huitrón María Teresa
 + Rojas López Carlos Manuel
