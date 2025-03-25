@@ -129,3 +129,15 @@ Equipo 22
 + Enya Zetina Rosas
 + Eduardo Reyes Román
 + Vital Arana José Andrés de Jesús
+
+Equipo 23 (actualizado)
+
++ Jorge Alberto Cruz García
++ Marcial Martínez Alcántara
++ Cristopher Alejandro García Azamar
+
+Equipo 24 (actualizado)
+
++ Martínez Huitrón María Teresa
++ Rojas López Carlos Manuel
++ Ortega Solano Jonathan
