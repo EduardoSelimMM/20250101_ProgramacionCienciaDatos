@@ -74,3 +74,55 @@ git clone https://github.com/usuario/ccolaboracion-git-equipo-n.git
 ## Segunda parte
 
 En construcción...
+
+### Subsección 1: Prueba de Bechdel
+
+La prueba de Bechdel es un método que se usa para evaluar la representación de las mujeres en películas, series u otras obras narrativas. Para aprobarla, la obra debe cumplir tres criterios: (1) tener al menos dos personajes femeninos con nombre, (2) que estos personajes conversen entre sí en algún momento, y (3) que su diálogo no gire en torno a un hombre (por ejemplo, relaciones románticas o familiares). Fue propuesta por Alison Bechdel, destacando la falta de desarrollo de personajes femeninos en muchas producciones, aunque no mide la calidad ni la igualdad de género de manera exhaustiva.
+
+**Actividad 1:** Cargue en un objeto de R el contenido del archivo "prueba_bechdel.csv"
+
+En dicho dataframe se tienen algunas columnas como:
+
+budget_2013: Presupuesto en dólares ajustados a la inflación de 2013
+
+domgross_2013: Recaudación nacional (EE.UU.) en dólares ajustados a la inflación de 2013
+
+intgross_2013: Recaudación internacional total (es decir, mundial) en dólares a la inflación de 2013
+
+En la columna `clean_test` encontrará los valores
+
+ok = Pasa la prueba
+dubious = Se duda si pasa la prueba
+men = Las mujeres sólo hablan acerca de hombres
+notalk = Las mujeres no se hablan entre sí
+nowomen = menos de dos mujeres
+
+**Actividad 2:** Use alguna de las funciones case_when o if_else de {dplyr} para cambiar los valores de la columna `clean_test`
+
+ok -> pasa
+dubious -> dudosamente
+men -> discurso_hombres
+no_talk -> silencio
+nowomen -> sin_mujeres
+
+**Actividad 3:** Use alguna de las funciones case_when o if_else de {dplyr} para cambiar los valores de la columna `binary`
+
+FAIL -> no_pasa
+PASS -> si_pasa
+
+**Actividad 4:** Haga una gráfica con funciones de {ggplot2} que muestre la composición de observaciones que sí pasaron y no pasaron la prueba de Bechdel
+
+**Actividad 5:** Haga una gráfica con funciones de {ggplot2} que muestre la composición de observaciones que sí pasaron y no pasaron la prueba de Bechdel, con respecto al año
+
+**Actividad 6:** Haga una gráfica con funciones de {ggplot2} que muestre la composición de observaciones que pasaron, dudosamente, sólo hablaban de hombres, no hablaban entre sí y no hay mujeres.
+
+**Actividad 7:** Haga una gráfica con funciones de {ggplot2} que muestre la composición de observaciones que pasaron, dudosamente, sólo hablaban de hombres, no hablaban entre sí y no hay mujeres, con respecto al año.
+
+**Actividad 8:** Haga una gráfica con funciones de {ggplot2} que muestre la relación entre el presupuesto de la obra con la ganancia de la obra en función de si paso o no la prueba de Bechdel. ¿Puede hacer algún tipo de afirmación?
+
+**Actividad 9:** Haga dos gráficas adicionales con funciones de {ggplot2} que considere interesantes.
+
+
+
+
+
