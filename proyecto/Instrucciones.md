@@ -140,6 +140,34 @@ Actividad 5: Obtenga las 10 aerolíneas que han tenido el menor número de muert
 
 *Importante:* Sus visualizaciones deben tener formato suficientemente bueno para publicar en alguna revista.
 
+### Subsección 3: Calidad del café
+
+Se usará el conjunto de datos de encuesta de café
+
+`datos <- readr::read_csv("coffee_ratings.csv")`
+
+Actividad 1: ¿Cuántos renglones y cuántas columnas tiene el objeto `datos`?
+
+Actividad 2: Genere una nueva columna llamada `continent` que tome los valores "north-america", "south-america", "europe", "asia", "africa", "oceania" en función de los valores de la columna `country_of_origin`
+
+Actividad 3: Elabore una visualización con {ggplot2} que identifique alguna relación entre las columnas `total_cup_points`, `aroma`, `flavor`, `acidity` EN UN MISMO CANVAS.
+
+Actividad 4: Elabore una visualización con {ggplot2} que identifique alguna relación entre las columnas `total_cup_points`, `aroma`, `flavor`, `acidity` por `continent` EN UN MISMO CANVAS.
+
+Actividad 5: Elabore una visualización con {ggplot2} que identifique alguna relación entre las columnas `total_cup_points`, `aroma`, `flavor`, `acidity` por `species` EN UN MISMO CANVAS.
+
+Actividad 6: Elabore una visualización con {ggplot2} que identifique alguna relación entre las columnas `total_cup_points`, `altitude_mean_meters` y `aroma` EN UN MISMO CANVAS.
+
+Actividad 7: Elabore una visualización con {ggplot2} que identifique alguna relación entre las columnas `total_cup_points`, `altitude_mean_meters` y `aroma` por `continent` EN UN MISMO CANVAS.
+
+Actividad 8: Elabore una visualización con {ggplot2} que identifique alguna relación entre las columnas `total_cup_points`, `altitude_mean_meters` y `aroma` por `species` EN UN MISMO CANVAS.
+
+Actividad 9: Elabore una visualización con {ggplot2} entre `sweetness` y `total_cup_points` de los 5 países con mayor calificación de `balance`.
+
+Actividad 10: Elabore una visualización con {ggplot2} entre `acidity` y `total_cup_points` de los 5 países con menor calificación de `aftertaste`.
+
+*Importante:* Sus visualizaciones deben tener formato suficientemente bueno para publicar en alguna revista.
+
 
 
 
