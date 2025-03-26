@@ -122,6 +122,23 @@ PASS -> si_pasa
 
 **Actividad 9:** Haga dos gráficas adicionales con funciones de {ggplot2} que considere interesantes.
 
+### Subsección 2: ¿Aerolíneas seguras?
+
+Se usará el conjunto de datos `airline_safety` de la librería {fivethirtyeight}
+
+`datos <- fivethirtyeight::airline_safety`
+
+Actividad 1: Con funciones de la librería {dplyr} para obtener el número total de incidentes, número total de accidentes fatales y el número total de muertes en el periodo de 1985 a 2014.
+
+Actividad 2: Obtenga las 10 aerolíneas que han tenido el mayor número de incidentes. Haga una visualización que permita identificar a éstas. ¿Hay algún cambio en este top 10 antes y después del año 2000?
+
+Actividad 3: Obtenga las 10 aerolíneas que han tenido el menor número de incidentes. Haga una visualización que permita identificar a éstas. ¿Hay algún cambio en este top 10 antes y después del año 2000?
+
+Actividad 4: Obtenga las 10 aerolíneas que han tenido el mayor número de muertes. Haga una visualización que permita identificar a éstas. ¿Hay algún cambio en este top 10 antes y después del año 2000?
+
+Actividad 5: Obtenga las 10 aerolíneas que han tenido el menor número de muertes. Haga una visualización que permita identificar a éstas. ¿Hay algún cambio en este top 10 antes y después del año 2000?
+
+*Importante:* Sus visualizaciones deben tener formato suficientemente bueno para publicar en alguna revista.
 
 
 
